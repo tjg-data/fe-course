@@ -9,7 +9,8 @@
         /*
             descendent selector : 조상[space]자손
             child selector : 부모[>]자식
-            sibilings selector : 기준태그[+]형제태그
+            인접한 sibilings selector : 기준태그[+]형제태그
+            모든 sibilings selector : 기준태그[~]형제태그
         */
 
         h1 {
@@ -35,6 +36,12 @@
             color: yellow;
             text-decoration: none;
         }
+        h2 + p {
+            background-color: silver;
+        }
+        h2 ~ p {
+            color: blue;
+        }
     </style>
 </head>
 <body>
@@ -52,5 +59,9 @@
             <li><a href="#">menu3</a></li>
         </ul>
     </nav>
+    <h2>Sibilings Selector</h2>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente enim voluptate similique ab maxime hic cupiditate consequatur qui nihil amet, reprehenderit, sed cumque repellendus ad et, illo ducimus voluptatem possimus!</p>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente enim voluptate similique ab maxime hic cupiditate consequatur qui nihil amet, reprehenderit, sed cumque repellendus ad et, illo ducimus voluptatem possimus!</p>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente enim voluptate similique ab maxime hic cupiditate consequatur qui nihil amet, reprehenderit, sed cumque repellendus ad et, illo ducimus voluptatem possimus!</p>
 </body>
 </html>
