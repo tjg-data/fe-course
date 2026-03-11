@@ -10,9 +10,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Nanum Gothic';}
+        * { 
+            font-family: 'Nanum Gothic';
+            background-color: rgb(246, 245, 239);
+        }
         header {
-            border: 1px solid red;
+            /* border: 1px solid red; */
             width: 1000px;
             margin: auto;
             display: flex;  
@@ -22,7 +25,7 @@
         .header-menu-bottom ul {
             display: flex;
             list-style: none;
-            border: 1px solid blue;
+            /* border: 1px solid blue; */
             justify-content: right;
         }
         .header-menu-top ul { 
@@ -35,7 +38,24 @@
             text-decoration: none;
             color: #333;
         }
-
+        .header-menu-bottom ul a {
+            letter-spacing: .5px;
+            font-size: .9rem;
+        }
+        .header-menu-top li:last-child {
+            border: 1px solid gray;
+            border-radius: 4px;
+            padding: 5px;
+            background-color: white;
+        }
+        .header-menu-top li:last-child i{
+            font-size: 1.5rem;
+            font-weight: 700;
+            background-color: white;
+        }
+        .header-menu-top li:last-child input{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -50,7 +70,10 @@
                     <li><a href="#">My Starbucks</a></li>
                     <li><a href="#">Customer Service & Ideas</a></li>
                     <li><a href="#">Find a Store</a></li>
-                    <li><a href="#"><i class="fa-brands fa-sistrix"></i></a></li>
+                    <li>
+                        <input type="text">
+                        <a href="#"><i class="fa-brands fa-sistrix"></i></a>
+                    </li>
                 </ul>
             </nav>
             <nav class="header-menu-bottom">
