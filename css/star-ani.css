@@ -23,7 +23,9 @@
     .main-top-menus {
         position: absolute;
     }
+    img { max-width: 100%;}
     .set-01 {
+        max-width: 100%;
         z-index: 10;
         top: 17.03%;
         left: 35.35%;
@@ -59,7 +61,8 @@
         height: 38px;
         top: 59.29%;
         left: 11.35%;
-        text-align: center;            
+        text-align: center;     
+        max-width: 100%;       
     }
     .btn-slogan a {
         font-size: 15px;
@@ -76,6 +79,7 @@
         color: #666;
         line-height: 34px;
         cursor: pointer;
+        max-width: 100%;
     }
 
     /* 상단 배너 - 애니메이션 추가 */
