@@ -1,21 +1,14 @@
-@font-face {
-            font-family: 'nbg';
-            src: url('../fonts/NanumBarunGothic.eot');
-        }
         * { 
-            font-family: '맑은 고딕','Nanum Gothic';
+            font-family: 'Nanum Gothic', '맑은 고딕';
             box-sizing: border-box;
             margin: 0; 
             padding: 0;
         }
         header {
-            /* border: 1px solid red; */
-            font-family: 'nbg';
             width: 100%;            
             background-color: rgb(246, 245, 239);       
         }
         .header-content {
-            /* border: 2px solid red;  */
             width: 1200px;
             margin: auto;
             display: flex;  
@@ -28,7 +21,6 @@
         .header-menu-bottom ul {
             display: flex;
             list-style: none;
-            /* border: 1px solid blue; */
             justify-content: right;
         }
         .header-menu-top ul { 
@@ -45,7 +37,6 @@
             letter-spacing: .5px;            
         }
         .header-menu-bottom ul a {
-            font-family: 'nbg';
             font-size: .9rem;
         }
         .header-menu-top li:last-child {
@@ -98,7 +89,6 @@
             color: #333;
             text-decoration: none;
             font-weight: 500;
-            /* border: 1px solid red; */
         }
         .menu-link:hover {
             background-color: #333;
@@ -108,5 +98,4 @@
         .menu-item:hover .submenu {
             display: block;
         }
-
         /*=== 서브메뉴 스타일 정의 종료 ===*/
