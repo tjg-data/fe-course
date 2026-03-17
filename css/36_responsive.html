@@ -9,6 +9,12 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         />
     <style>
+        .header-toggle {
+            display: none;
+            color: aqua;
+            font-size: 1.5rem;
+        }
+
         /* media query :: 
            중간에 처리되는 사이즈는 min-width로 정의 1001px 이상일때 실행되는 CSS */
         @media screen and (min-width: 1000px) {  
@@ -69,6 +75,8 @@
                 color: #fff;
                 font-weight: 2rem;
             }
+            .header-menu { display: none;}
+            .header-toggle { display: block;}
         }
     </style>
 </head>
@@ -84,7 +92,7 @@
                     <li><a href="#">게시판</a></li>
                     <li><a href="#">QnA</a></li>
                 </ul>
-                <button><i class="fa-solid fa-bars"></i></button>
+                <button class="header-toggle"><i class="fa-solid fa-bars"></i></button>
             </nav>
         </header>
         <main>Main</main>
