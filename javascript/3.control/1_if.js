@@ -4,7 +4,7 @@
  * if(조건절) .. else..,
  * if(조건절1) .. else if(조건절2).. else if(조건절3).. else..,
  * 
- * ✨삼항 연산자 : (조건절)? statement1 : statement2 ;
+ * ✨삼항 연산자 : (조건절)? [true]statement1 : [false]statement2 ;
  */
 
 // 입력되는 과일이름이 'apple'인 경우에만 이모지 출력
@@ -35,9 +35,19 @@ if(menus[0] == 'pizza') {
 
 //입력받은 숫자가 홀수이면 사과, 짝수이면 오렌지 출력
 let number = undefined;
-number = 123;
-if() {
-
+let fresult = undefined;
+number = 124;
+if(!(number%2)) { //조건식의 결과가 0,1이면, boolean 타입으로 자동변환
+    // console.log('🍊');
+    fresult = '🍊'; 
 } else {
-    
+    // console.log('🍎');    
+    fresult = '🍎'; 
 }
+// console.log('실행결과 : ', fresult);
+console.log(`실행결과 : ${fresult}`);
+
+//삼항 연산자
+(!(number%2)) ? fresult = '🍊' : fresult = '🍎';
+// console.log('실행결과(삼항) : ', fresult);
+console.log(`실행결과(삼항) : ${fresult}`);
