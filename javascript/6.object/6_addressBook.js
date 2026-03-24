@@ -14,6 +14,7 @@ import * as object from '../commons/object.js';
 //홍길동, 스미스, 이순신, 김유신, 제임스
 let addressBook = object.getObjects();  //objects 주소 공유
 
+
 //1. 객체 생성
 object.createObject('hong');
 

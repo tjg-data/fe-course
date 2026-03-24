@@ -19,6 +19,10 @@ export function getObject(objectName) {
     return objects[objectName];
 }
 
+export function setObject(key, value) {
+    objects[key] = value;
+}
+
 
 /**
  * 객체 CRUD 관리 모듈
@@ -37,4 +41,16 @@ export function updateValue(object, key, newValue) {
 
 export function deleteValue(object, deleteKey) {
     delete object[deleteKey]; 
+}
+
+/**
+ * 생성자 함수를 이용한 객체 CRUD
+ */
+export function Fruit(name, emoji) {
+    this.name = name;
+    this.emoji = emoji;
+
+    this.display = () => {
+        console.log(this.name, this.emoji);        
+    }
 }
