@@ -34,6 +34,11 @@ console.log(hong.getName());
 console.log(hong.getAge());
 hong.display();
 
+hong.empno = '2334';  //empno 필드가 새롭게 추가됨!!, empno, #empno 2개가 존재함
+console.log('hong.empno ==> ', hong.empno);  //2334 출력
+console.log(hong);
+
+
 let smith = new Employee('4567', '스미스', 36);
 smith.display();
 

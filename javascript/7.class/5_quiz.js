@@ -10,3 +10,9 @@ let dataList = [
     { name: '박정민', age: 23, address: '인천시', emoji: '🧑'},
     { name: '홍길순', age: 24, address: '서울시', emoji: '👩'},
 ];
+
+/** 학생(Student) 클래스 정의 */
+class Student {
+
+
+}
