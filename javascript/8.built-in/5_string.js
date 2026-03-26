@@ -35,5 +35,13 @@ console.log(fruits, typeof fruits);
 console.log(fruitList, typeof fruitList);
 console.log(fruitList2, typeof fruitList2);
 
+// 문자열 추출 - substring(), slice()
+let str4 = 'Hello~ JavaScript!!';
+console.log(str4.substring(0, 5)); //0~4번지 출력
+console.log(str4.slice(0, 5)); //0~4번지 출력
+
+
+
+
 
 
