@@ -13,6 +13,12 @@ function searchName(scoreList, name) {
 function searchScore(scoreList, subject, score) {
     return scoreList.filter(item => item[subject] >= score);
 }
+function updateScore(scoreList, subject, score) {
+    return scoreList.map(item => (item[subject]<100) ? 
+                                {   ...item,
+                                    subject:item[subject] + score
+                                } : item );
+}
 
 let scoreList = createList();
 createScore(scoreList, '홍길동', 100, 100, 100);
@@ -32,3 +38,4 @@ console.log('searchScore :: ', searchScore(scoreList, 'kor', 90));
 console.log('searchScore :: ', searchScore(scoreList, 'eng', 70));
 
 //모든 학생의 수학점수에 +5
+console.log('updateScore :: ', updateScore(scoreList, 'math', 5));
