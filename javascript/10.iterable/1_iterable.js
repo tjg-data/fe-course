@@ -2,7 +2,7 @@
  * Iterable(순회) Object : Iteration Protocol을 준수하는 객체
  * - for .. of 구문
  * - String, Array, Set, Map
- * - ...(Spread Operator: 스프레드 연산자, 전개구문) : 블록안에서 객체의 데이터를 전개함(펼쳐놓음)
+ * - ...(Spread Operator: 스프레드 연산자, 전개 구문) : 블록안에서 객체의 데이터를 전개함(펼쳐놓음)
  * - ...(Rest Parameter) : 매개변수 모든 값을 배열로 저장
  * - ...(Destructring Object: 구조분해 할당) : 객체를 분해한 후 변수에 할당
  */
