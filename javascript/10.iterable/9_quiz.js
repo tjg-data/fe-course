@@ -17,5 +17,45 @@ let myArray = new Array(mySet);  //[100, '홍길동']
 console.log(myArray);
 console.log(myArray[0]);
 
+/**
+ * 구조 분해 할당
+ */
+const getObject1 = () => {
+    return {
+        name: '홍길동',
+        age: 30,
+        job: '개발자',
+        address: '서울시'
+    }
+}
+
+const getObject2 = () => {
+    return [1, 2, 3, 4, 5];
+}
+
+let {name, address} = getObject1();
+let [n1, n2, n3, n4, n5] = getObject2();
+console.clear();
+console.log(name, address);
+console.log(n1, n2, n3, n4, n5);
+
+//textList를 입력받아, 3글자 이상의 text이면 새로운 배열을 생성하는 함수 정의
+const textFilter = (textList) => {
+    return textList.filter(text => text.length >= 3);
+}
+//textList를 입력받아, 3글자 이하의 text이면 새로운 배열을 생성하는 함수 정의
+const textFilter2 = (textList) => {
+    return textList.filter(text => !(text.length >= 3));
+}
+
+let result = textFilter(['javascript', 'react', 'html', 'css', 'a', 'ab']);
+let result2 = textFilter2(['javascript', 'react', 'html', 'css', 'a', 'ab']);
+console.log(result);
+console.log(result2);
+
+
+
+
+
 
 
