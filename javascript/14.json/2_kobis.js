@@ -7,6 +7,16 @@ const getJson = async(type, targetDt) => {
 }
 
 
+
+const handleMovieInfo = async (movieCd) => {
+    //영화상세  API를 통해 json 객체 가져오기
+    let url = `http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=${key}&movieCd=${movieCd}`;
+    let response = await fetch(url);
+    console.log(response.json());  
+
+}
+
+
 //handleBoxOffice 함수 정의
 const handleBoxOffice = async() => {
     let type = document.querySelector('#type').value;
@@ -46,7 +56,7 @@ console.log(kobis);
                     kobisBoxOfficeList.map((movie) => `
                         <tr>
                             <td>${movie.rank}</td>
-                            <td>${movie.movieNm}</td>
+                            <td><a href="#" onclick="handleMovieInfo(${movie.movieCd})">${movie.movieNm}</a></td>
                             <td>${movie.openDt}</td>
                             <td>${parseInt(movie.audiCnt).toLocaleString()}</td>
                             <td>${parseInt(movie.audiAcc).toLocaleString()}</td>
@@ -61,3 +71,4 @@ console.log(kobis);
     } 
     
 }
+
