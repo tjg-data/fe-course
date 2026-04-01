@@ -8,8 +8,15 @@
 </head>
 <body>
     <h1>KOBIS BOX OFFICE</h1>
+    <h3>선택: 
+        <select name="type" id="type">
+            <option value="default">선택</option>
+            <option value="daily">일별</option>
+            <option value="weekly">주간/주말</option>
+        </select>
+    </h3>
     <h3>날짜 : <input type='date' id="sdate">
-        <button type='button' onclick="handleBoxOffice()" >실행</button></h3>
+        <button type='button' onclick="handleBoxOffice()">실행</button></h3>
     <div id="content"></div>
 </body>
 </html>
