@@ -6,10 +6,15 @@ window.addEventListener('DOMContentLoaded', () => {
     let pwd = document.querySelector('#pwd');
     let cpwd = document.querySelector('#cpwd');
     let name = document.querySelector('#name');
+    let phone = document.querySelector('#phone');
+    let emailname = document.querySelector('#emailname');
+    let emaildomain = document.querySelector('#emaildomain');
     let idMsg = document.querySelector('#idMsg');
     let pwdMsg = document.querySelector('#pwdMsg');
     let cpwdMsg = document.querySelector('#cpwdMsg');
     let nameMsg = document.querySelector('#nameMsg');
+    let phoneMsg = document.querySelector('#phoneMsg');
+    let emailMsg = document.querySelector('#emailMsg');
 
     /** 아이디 체크 */
     id.addEventListener('input', () => {
@@ -41,6 +46,31 @@ window.addEventListener('DOMContentLoaded', () => {
             nameMsg.style.display = 'none';
         } else {
             nameMsg.style.display = 'inline-block';
+        }
+    });
+    /** 전화번호 체크 */
+    phone.addEventListener('input', () => {
+        if(phone.value.trim() !== '') {
+            phoneMsg.style.display = 'none';
+        } else {
+            phoneMsg.style.display = 'inline-block';
+        }
+    });
+    /** 이메일주소 체크 */
+    emailname.addEventListener('input', () => {
+        if(emailname.value.trim() !== '') {
+            emailMsg.style.display = 'none';
+        } else {
+            emailMsg.style.display = 'inline-block';
+
+        }
+    });
+    /** 이메일도메인 체크 */
+    emaildomain.addEventListener('change', () => {
+        if(emaildomain.value !== 'default') {
+            emailMsg.style.display = 'none';
+        } else {
+            emailMsg.style.display = 'inline-block';
         }
     });
 
