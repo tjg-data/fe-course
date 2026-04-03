@@ -2,7 +2,6 @@
  * DOM 객체 생성 후 객체별 이벤트 호출
  */
 window.addEventListener('DOMContentLoaded', () => {
-
     let id = document.querySelector('#id');
     let pwd = document.querySelector('#pwd');
     let idMsg = document.querySelector('#idMsg');
@@ -42,7 +41,6 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
 
 });
 
