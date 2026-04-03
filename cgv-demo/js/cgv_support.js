@@ -43,8 +43,15 @@ async function createTable() {
             </thead>
             <tbody>
             ${
-
-
+                list.map((item, idx) => `
+                    <tr>
+                        <td>${idx+1}</td>
+                        <td>${item.type}</td>
+                        <td>${item.title}</td>
+                        <td>${item.rdate}</td>
+                        <td>${item.hits}</td>
+                    </tr>
+                `).join("")
             }
             </tbody>
             <tfoot>
@@ -55,5 +62,5 @@ async function createTable() {
         </table>
     `;
 
-    
+    document.querySelector('#before-table').insertAdjacentHTML('afterEnd', output);
 }
