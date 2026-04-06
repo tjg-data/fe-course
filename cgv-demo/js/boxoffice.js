@@ -62,7 +62,7 @@ async function createBoxoffice() {
         <ul>
             ${
                 outputList.map((movie) => `
-                    <li>
+                    <li style="width: 80%">
                         <div>
                             <img src="${movie.poster}" 
                                 alt="moviechart img"

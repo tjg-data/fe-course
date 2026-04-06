@@ -6,7 +6,14 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/cgv.css">
     <link rel="stylesheet" href="css/commons.css">
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+    <script src="js/swiper_boxoffice.js"></script>
     <script src="js/boxoffice.js"></script>
+    <link rel="stylesheet" href="css/swiper_boxoffice.css">
 </head>
 <body>
     <div class="content-moviechart">
@@ -21,7 +28,32 @@
                     <button class="total-view-button">전체보기</button>
                 </div>
             </article>
-            <article class="content-moviechart-list" id="boxoffice">
+            <article class="content-moviechart-list" >
+                <!-- Slider main container -->
+                <div class="swiper">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    <!-- Slides -->
+                    <div class="swiper-slide" id="boxoffice">
+                        
+                    </div>
+                    <!-- <div class="swiper-slide">
+                        <img class="swiper-img" src="../../images/swiper/img2.jpg" alt="img2">
+                    </div>
+                    <div class="swiper-slide">
+                        <img class="swiper-img" src="../../images/swiper/img3.jpg" alt="img3">
+                    </div> -->
+
+                </div>
+                <!-- If we need pagination -->
+                <div class="swiper-pagination"></div>
+
+                <!-- If we need navigation buttons -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+
+                <!-- If we need scrollbar -->
+                <div class="swiper-scrollbar"></div>
                 <!-- <ul>
                     <li>
                         <div>

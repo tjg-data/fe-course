@@ -20,6 +20,59 @@ window.addEventListener('DOMContentLoaded', () => {
 
 }); //window event
 
+//filterMenu 함수 생성
+async function filterMenu(type) {
+    let filterList = null;
+    if(type === 'all') {
+        // createTable();
+        filterList = await getJson();
+    } else {
+        filterList = await filterData(type);
+    }
+    // console.log('result --> ',filterList);
+    let output = `
+        <table id='stable'>
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>구분</th>
+                    <th>제목</th>
+                    <th>등록일</th>
+                    <th>조회수</th>
+                </tr>
+            </thead>
+            <tbody>
+            ${
+                filterList.map((item, idx) => `
+                    <tr>
+                        <td>${idx+1}</td>
+                        <td>${item.type}</td>
+                        <td>${item.title}</td>
+                        <td>${item.rdate}</td>
+                        <td>${item.hits}</td>
+                    </tr>
+                `).join("")
+            }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">1 2 3 4 5  >></td>
+                </tr>
+            </tfoot>
+        </table>
+    `;
+    
+    document.querySelector('#stable')?.remove();
+    document.querySelector('#before-table').insertAdjacentHTML('afterEnd', output);
+    
+}
+
+//filterData 함수 생성
+async function filterData(type) {
+    let data = await getJson();
+    // console.log('data => ', type, data);
+    return data.filter(item => item.type === type);
+}
 
 //support.json JSON 데이터 가져오기
 async function getJson() {
@@ -31,7 +84,7 @@ async function createTable() {
     let list = await getJson();
     // console.log('list =>', list);
     let output = `
-        <table>
+        <table id='stable'>
             <thead>
                 <tr>
                     <th>번호</th>
