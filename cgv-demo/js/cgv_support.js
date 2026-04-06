@@ -17,8 +17,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     filterMenu('all');  //맨 처음 호출되는 테이블
 
+    let menuList = document.querySelectorAll('.filter-menu li a');
+    menuList.forEach(menu => {
+        menu.addEventListener('click', () => {
+            filterMenu(menu.id);
+        });
+    });
+    
 }); //window event
-
 
 //filterMenu 함수 생성
 async function filterMenu(type) {
