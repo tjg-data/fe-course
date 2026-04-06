@@ -6,10 +6,18 @@ const kmdb_key = `59H5F0U0OFQB3R2261VM`;
 
 /** KOBIS API - 박스오피스 가져오기 */
 async function getKobis() {
+    let date = new Date();
+    let year = new String(date.getFullYear());
+    let month = new String(date.getMonth()+1);
+    let day = new String(date.getDate()-1);
+    month = (month.length<2)? '0'.concat(month) : month;
+    day = (day.length<2)? '0'.concat(day) : day;
+    let today = year.concat(month).concat(day);
+
     let url = `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice`;
     url += `/searchDailyBoxOfficeList.json?`;
     url += `key=${kobis_key}`;
-    url += `&targetDt=20260405`;
+    url += `&targetDt=${today}`;
 
     let response = await fetch(url);
     return response.json();
@@ -60,7 +68,7 @@ async function createBoxoffice() {
                                 alt="moviechart img"
                                 width="200px">
                         </div>
-                        <div><h3>${movie.movieNm}</h3></div>
+                        <div><h4>${movie.movieNm}</h4></div>
                         <div><h5>누적관객수 ${parseInt(movie.audiAcc).toLocaleString()}</h5></div>
                     </li>
                 `).join("")
