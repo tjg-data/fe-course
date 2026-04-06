@@ -32,24 +32,46 @@ async function getPoster(movieNm, openDt) {
     return posters?.[0];
 }
 
+async function showList(list) {    
+    let slist = list.slice(0, 5).map(async (movie) => {  
+        let movieNm = movie.movieNm;
+        let openDt = movie.openDt;  
+        let audiAcc = movie.audiAcc;    
+        let poster = await getPoster(movie.movieNm, movie.openDt);           
+        // console.log(movie.movieNm, movie.openDt, poster); 
+        return { movieNm, openDt, audiAcc, poster}            
+    }); 
+
+    return await Promise.all(slist);
+}
+
 async function createBoxoffice() {
     let kobis = await getKobis();
     let list = kobis.boxOfficeResult.dailyBoxOfficeList;
-    console.log(list);
+    let outputList = await showList(list);    
+    // console.log('showList => ', outputList); 
+    let output = `
+        <ul>
+            ${
+                outputList.map((movie) => `
+                    <li>
+                        <div>
+                            <img src="${movie.poster}" 
+                                alt="moviechart img"
+                                width="200px">
+                        </div>
+                        <div><h3>${movie.movieNm}</h3></div>
+                        <div><h5>누적관객수 ${movie.audiAcc}</h5></div>
+                    </li>
+                `).join("")
+            }
+        </ul>
+    `;  
 
-    let showList = list.slice(0, 5).map(async (movie) => {  
-        let movieNm = movie.movieNm;
-        let openDt = movie.openDt;      
-        let poster = await getPoster(movie.movieNm, movie.openDt);           
-        // console.log(movie.movieNm, movie.openDt, poster); 
-        return { movieNm, openDt, poster}            
-    });  //[ {movieNm:영화제목, openDt:개봉일, poster:포스터}, {~}...]
-
-    console.log('showList => ', showList);
-    
-    
-    
+    // console.log(output);
+    document.querySelector('#boxoffice').innerHTML = output;    
 }
+
 
 window.addEventListener('DOMContentLoaded', () => {
         createBoxoffice();
