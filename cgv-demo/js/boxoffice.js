@@ -61,7 +61,7 @@ async function createBoxoffice() {
                                 width="200px">
                         </div>
                         <div><h3>${movie.movieNm}</h3></div>
-                        <div><h5>누적관객수 ${movie.audiAcc}</h5></div>
+                        <div><h5>누적관객수 ${parseInt(movie.audiAcc).toLocaleString()}</h5></div>
                     </li>
                 `).join("")
             }
