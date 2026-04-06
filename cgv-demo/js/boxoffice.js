@@ -17,7 +17,12 @@ async function getKobis() {
 
 async function createBoxoffice() {
     let kobis = await getKobis();
-    console.log(kobis);
+    let list = kobis.boxOfficeResult.dailyBoxOfficeList;
+    console.log(list);
+
+    list.slice(0, 5).map((movie, idx) => {        
+            console.log(movie.movieNm);            
+    });
 }
 
 window.addEventListener('DOMContentLoaded', () => {
