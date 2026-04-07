@@ -1,17 +1,22 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+/**
+ * 부모 컴포넌트 : 최상위 컴포넌트
+ */
 import './App.css'
+import Button from './components/Button.jsx';
+import Content from './components/Content.jsx';
 
 export default function App() {
-  const [count, setCount] = useState(0)
 
   return (  
     <>
       <h1>Welcome to React World!!</h1>
+      <Button />
+      <Button />
+      <Button />
+      <Button />
+      <Button />
+      <Content />
     </>
   )
 }
 
-// export default App
