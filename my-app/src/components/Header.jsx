@@ -5,7 +5,7 @@ export default function Header() {
     return(
         <header className='header'>
             <img src={img01} alt="tree" width="150px"/>
-            <h1>Header</h1>
+            <h1>Header</h1>            
         </header>
     )
 }
