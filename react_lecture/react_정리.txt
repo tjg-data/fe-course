@@ -34,3 +34,10 @@
     2) 리액트 앱 생성 : my-app
        형식 : npm create vite@latest [앱이름(프로젝트명)]
        예) npm create vite@latest my-app
+
+4. 리액트 앱 동작 순서
+   (1) npm run dev 서버 실행 : http://localhost:5173/index.html
+   (2) index.html 렌더링 
+   (3) main.jsx 호출 
+        - index.html의 root 아이디에 import한 컴포넌트(App) 추가  
+   (4) App 컴포넌트 렌더링 : virtual dom
