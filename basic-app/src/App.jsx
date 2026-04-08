@@ -1,18 +1,17 @@
-import './App.css';
-import style from './App.module.css'  //전역 CSS
-import Body from './components/Body.jsx';
-import Parent from './components/Parent.jsx';
+import AvatarImage from "./components/avatar/AvatarImage.jsx"
+import people1 from './assets/people1.webp';
+import people2 from './assets/people2.webp';
+import people3 from './assets/people3.webp';
 
-function App() {
+export default function App() {
 
   return ( 
     <>
-      <h1>Hello~ React!!</h1>
-      <button className={style.button}>App::클릭하세요</button>
-      <Body />
-      <Parent name="홍길동 아버지" />
+      <AvatarImage img={people1} />
+      <AvatarImage img={people2} />
+      <AvatarImage img={people3} />
     </>
   )
 }
 
-export default App
+
