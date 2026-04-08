@@ -120,10 +120,58 @@
       예) <h1 style={{backgroundColor:'red',..}}>Hello~ React</h1> 
 
      - CSS 파일로 작성하고, 컴포넌트에서 import 
-      예) App.css --> App.jsx import
+      예) 컴포넌트.css --> App.jsx import, 전역 CSS
+          컴포넌트.module.css  --> 지역 CSS
          App.jsx
          ----------------------
-         import 'CSS 파일 위치';
+         import 'CSS 파일 위치';  //전역 CSS
             ~
          <h1 className="body">CSS 클래스명 적용</h1>
-     
+
+7. 컴포넌트에 값 전달하기 
+  (1) Props란?
+    - 부모 컴포넌트가 자식 컴포넌트에게 전달하는 단일 객체(Properties 약자)
+    - 단방향으로만 전달 가능함 : 부모 -> 자식
+
+  (2) Props 전달 방식 
+    1) 기본 전달하기
+      function Parent() {
+        return(
+          <Child name="홍길동" />
+        )
+      }  
+      function Child(props) {  //props = {name:"홍길동"}
+        return(
+          <h1>Hello~ My name is {props.name}</h1>
+        )
+      } 
+
+    2) ✨구조 분해 할당
+      function Parent() {
+        return(
+          <Child name="홍길동" />
+        )
+      }  
+      function Child({name}) {  //props = {name:"홍길동"}
+        //let {name} = props;
+        return(
+          <h1>Hello~ My name is {name}</h1>
+        )
+      }   
+
+    3) 스프레드 연산자
+      function Parent() {
+        let info = {
+          name:"홍길동",
+          age: "20"
+        }
+        return(
+          <Child name="홍길동" info={info}/>
+        )
+      }  
+      function Child({name}) {  //props = {name:"홍길동", info:{...}}
+        //let {name} = props;
+        return(
+          <h1>Hello~ My name is {name}</h1>
+        )
+      }   
