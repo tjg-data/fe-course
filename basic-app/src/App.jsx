@@ -3,7 +3,7 @@ import AvatarImageList from "./components/avatar/AvatarImageList.jsx"
 import Avatar from "./components/avatar/Avatar.jsx"
 import AvatarList from "./components/avatar/AvatarList.jsx"
 import style from './components/avatar/Avatar.module.css';
-import Menu from './components/menu/Menu.jsx';
+import MenuList from './components/menu/MenuList.jsx';
 import mstyle from './components/menu/Menu.module.css';
 import people1 from './assets/people1.webp';
 import people2 from './assets/people2.webp';
@@ -22,12 +22,20 @@ export default function App() {
     {img: people3, name: "Anne"},
     {img: people3, name: "Anne"}
   ]
+  const mlist = [
+    {title: "멤버십", href: "#", style: mstyle.menu1},
+    {title: "고객센터", href: "#", style: mstyle.menu1},
+    {title: "단체관람/대관문의", href: "#", style: mstyle.menu1},
+    {title: "로그인", href: "#", style: mstyle.menu1},
+  ]
+
   return ( 
     <>
       <AvatarImage img={people1} style={style.avatar_img}/>
       <Avatar name="Anne" img={people3} />
       <AvatarImageList imgList={list} />
       <AvatarList list={alist} />
+      <MenuList list={mlist} />
     </>
   )
 }
