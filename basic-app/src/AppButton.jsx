@@ -18,7 +18,7 @@ export default function App() {
         <>
             <Button type="button"
                     name="버튼1"
-                    styles={stylesObj}
+                    styles={stylesObj} 
                     />
             <Button type="submit"
                     name="회원가입"
