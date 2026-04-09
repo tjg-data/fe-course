@@ -225,4 +225,17 @@
       <button type="button" name="버튼1" onClick={handleClick} />
       <button type="button" name="버튼2" onClick={(e)=> console.log(e.target)} />
 
+9. 상태 관리(State) - useState   
+  (1) 컴포넌트가 관리하는 동적값이 변경되면, 리액트 컴포넌트가 자동으로 리렌더링함 
+  (2) useState 사용법
+    [형식]  import { useState } from 'react';            
+           const [(동적값)변수, set변수명] = useState(변수의 초기값);
+    
+    예) Number :: const [number, setNumber] = useState(0);
+        String :: const [string, setString] = useState('');
+        Array :: const [array, setArray] = useState([]);
+        Object :: const [obj, setObj] = useState({});
+
+
+
 
