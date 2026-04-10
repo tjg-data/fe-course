@@ -1,26 +1,17 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 export default function Login() {
     const idRef = useRef(null);
     const pwdRef = useRef(null);
+    const nameRef = useRef(null);
+    const [form, setForm] = useState({id:'', pwd:'', name:''});
 
-    const handleLoginCheck = () => {
-        if(idRef.current.value.trim() === "") {
-            alert("아이디를 입력해주세요");
-            idRef.current.focus();
-        } else if(pwdRef.current.value.trim() === "") {
-            alert("패스워드를 입력해주세요");
-            pwdRef.current.focus();
-        } else {
-            //아이디, 패스워드 전송 ==> Object Literal
-            //{id:'test', pwd:'1234'}
-            let sendObj = {
-                id: idRef.current.value.trim(),
-                pwd: pwdRef.current.value.trim()
-            }
-            console.log("서버 전송-->", sendObj);            
-        }
+    const handleFormChange = (e) => {
+        //이벤트 발생시 이벤트 객체의 name, value  가져오기
+        let { name, value } = e.target;
+        setForm({...form, [name]:value});  //새로운 form 생성
     }
+
     const handleLoginSubmit = (e) => {
         e.preventDefault();
 
@@ -31,14 +22,7 @@ export default function Login() {
             alert("패스워드를 입력해주세요");
             pwdRef.current.focus();
         } else {
-            //아이디, 패스워드 전송 ==> Object Literal
-            //{id:'test', pwd:'1234'}
-            let sendObj = {
-                id: idRef.current.value.trim(),
-                pwd: pwdRef.current.value.trim()
-                
-            }
-            console.log("서버 전송-->", sendObj);            
+            console.log("서버 전송-->", form);            
         }
     }
 
@@ -52,14 +36,27 @@ export default function Login() {
                         <input  type="text" 
                                 id="id" 
                                 name="id"
-                                ref={idRef} />
+                                value={form.id}
+                                ref={idRef}
+                                onChange={handleFormChange}/>
                     </li>
                     <li>
                         <label htmlFor="pwd">패스워드</label>
                         <input  type="password" 
                                 id="pwd" 
                                 name="pwd"
-                                ref={pwdRef} />
+                                value={form.pwd}
+                                ref={pwdRef}
+                                onChange={handleFormChange}/>
+                    </li>
+                    <li>
+                        <label htmlFor="name">이름</label>
+                        <input  type="text" 
+                                id="name" 
+                                name="name"
+                                value={form.name}
+                                ref={nameRef}
+                                onChange={handleFormChange}/>
                     </li>
                     <li>
                         <button type="submit">Login</button>
