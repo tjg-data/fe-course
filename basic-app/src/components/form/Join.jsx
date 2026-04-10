@@ -43,6 +43,10 @@ console.log(form);
         }
     }
 
+    const handleFormReset = () => {
+        setForm(initForm);
+    }
+
     return (
         <>
             <div className="content">
@@ -144,7 +148,7 @@ console.log(form);
                             </li>
                             <li>
                                 <button type="submit">가입하기</button>
-                                <button type="button">가입취소</button>
+                                <button type="button" onClick={handleFormReset}>가입취소</button>
                             </li>
                         </ul>
                     </form>
