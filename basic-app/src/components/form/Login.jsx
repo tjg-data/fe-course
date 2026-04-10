@@ -3,8 +3,7 @@ import { useRef, useState } from 'react';
 export default function Login() {
     const idRef = useRef(null);
     const pwdRef = useRef(null);
-    const nameRef = useRef(null);
-    const [form, setForm] = useState({id:'', pwd:'', name:''});
+    const [form, setForm] = useState({id:'', pwd:''});
 
     const handleFormChange = (e) => {
         //이벤트 발생시 이벤트 객체의 name, value  가져오기
@@ -47,15 +46,6 @@ export default function Login() {
                                 name="pwd"
                                 value={form.pwd}
                                 ref={pwdRef}
-                                onChange={handleFormChange}/>
-                    </li>
-                    <li>
-                        <label htmlFor="name">이름</label>
-                        <input  type="text" 
-                                id="name" 
-                                name="name"
-                                value={form.name}
-                                ref={nameRef}
                                 onChange={handleFormChange}/>
                     </li>
                     <li>
