@@ -10,7 +10,7 @@ export default function EffectFetch() {
 
     const url = "http://localhost:5173/data/alist.json";    
     useEffect(()=>{
-        console.log('---> 마운트 or 업데이트시 호출!!');        
+        console.log('---> 마운트 or 업데이트시 호출!!', count);        
         const fetchData = async() => {
             const response = await fetch(url);
             const jsonData = await response.json();
@@ -21,8 +21,8 @@ export default function EffectFetch() {
 
     return(
         <>
-            <h2>{count}</h2>
             <AvatarList list={data} />
+            <h2>{count}</h2>
             <button type="button" onClick={()=>setCount(count+1)}>
                 증가(+)
             </button>
