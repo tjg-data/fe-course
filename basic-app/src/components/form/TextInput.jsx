@@ -1,5 +1,5 @@
 
-export default function TextInput({ item, value, handleChange }) {
+export default function TextInput({ item, value, handleChange, inputRef }) {
     const { type, name } = item;
     return (
         <input  type={type}
@@ -7,7 +7,7 @@ export default function TextInput({ item, value, handleChange }) {
                 name={name}
                 value={value}
                 onChange={(e)=>{ handleChange(e)}}
-                // ref={refs.addressRef}
+                ref={inputRef}
             />
     )
 }
