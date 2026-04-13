@@ -7,10 +7,13 @@ import { useRef, useState } from 'react';
 import { validateUserInfo } from '../../util/validate.js';
 
 export default function UserInfo() {
-    const nameRef = useRef(null);
-    const ageRef = useRef(null);
-    const addressRef = useRef(null);
-    const [form, setForm] = useState({name:'', age:'', address:''});
+    const refs = {
+        nameRef: useRef(null),
+        ageRef: useRef(null),
+        addressRef: useRef(null),
+        jobRef: useRef(null)
+    }
+    const [form, setForm] = useState({name:'', age:'', address:'', job:''});
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -20,7 +23,7 @@ export default function UserInfo() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if(validateUserInfo(nameRef, ageRef, addressRef)) {        
+        if(validateUserInfo(refs)) {        
             console.log('submit => ', form);            
         }
     }
@@ -39,7 +42,7 @@ export default function UserInfo() {
                                     name="name"
                                     value={form.name}
                                     onChange={handleChange}
-                                    ref={nameRef}                                    
+                                    ref={refs.nameRef}                                    
                                     />
                         </div>
                     </li>
@@ -52,7 +55,7 @@ export default function UserInfo() {
                                     name="age"
                                     value={form.age}
                                     onChange={handleChange}
-                                    ref={ageRef}
+                                    ref={refs.ageRef}
                                     />
                         </div>
                     </li>
@@ -65,27 +68,27 @@ export default function UserInfo() {
                                     name="address"
                                     value={form.address}
                                     onChange={handleChange}
-                                    ref={addressRef}
+                                    ref={refs.addressRef}
                                     />
                         </div>
                     </li>
                     <li>
                         <label htmlFor="job">직업</label>
-                        {!form.address?.trim() && <span style={{color:'red', fontSize:'0.6rem'}}> 주소를 입력해주세요</span>}
+                        {!form.job?.trim() && <span style={{color:'red', fontSize:'0.6rem'}}> 직업을 입력해주세요</span>}
                         <div>
                             <input  type="text" 
-                                    id="address" 
-                                    name="address"
-                                    value={form.address}
+                                    id="job" 
+                                    name="job"
+                                    value={form.job}
                                     onChange={handleChange}
-                                    ref={addressRef}
+                                    ref={refs.jobRef}
                                     />
                         </div>
                     </li>
                     <li>
                         <button type="submit">전송</button>
                         <button type="button" 
-                                onClick={()=> setForm({name:'', age:'', address:''})}>다시쓰기</button>
+                                onClick={()=> setForm({name:'', age:'', address:'', job:''})}>다시쓰기</button>
                     </li>
                     
                 </ul>
