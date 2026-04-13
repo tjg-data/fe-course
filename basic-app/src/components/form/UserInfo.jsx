@@ -4,6 +4,7 @@
  * - 전송 버튼 클릭시 유효성 체크 진행
  */
 import { useRef, useState } from 'react';
+import { validateUserInfo } from '../../util/validate.js';
 
 export default function UserInfo() {
     const nameRef = useRef(null);
@@ -19,17 +20,7 @@ export default function UserInfo() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if(nameRef.current.value.trim() === "") {
-            // alert("이름을 입력해주세요");
-            nameRef.current.focus();
-        } else if(ageRef.current.value.trim() === "") {
-            alert("나이를 입력해주세요")
-            ageRef.current.focus();
-        } else if(addressRef.current.value.trim() === "") {
-            alert("주소를 입력해주세요")
-            addressRef.current.focus();
-        } else {
-            //서버 전송
+        if(validateUserInfo(nameRef, ageRef, addressRef)) {        
             console.log('submit => ', form);            
         }
     }
@@ -41,22 +32,20 @@ export default function UserInfo() {
                 <ul>                    
                     <li>
                         <label htmlFor="name">이름</label>
-                        { form.name === "" &&
-                            <span style={{color:'red', fontSize:'0.6rem'}}> 이름을 입력해주세요</span>
-                        }
+                        { !form.name?.trim() && <span style={{color:'red', fontSize:'0.6rem'}}> 이름을 입력해주세요</span> }
                         <div>
                             <input  type="text" 
                                     id="name" 
                                     name="name"
                                     value={form.name}
                                     onChange={handleChange}
-                                    ref={nameRef}
+                                    ref={nameRef}                                    
                                     />
                         </div>
                     </li>
                     <li>
                         <label htmlFor="age">나이</label>
-                        <span style={{color:'red', fontSize:'0.6rem'}}> 나이를 입력해주세요</span>
+                        {!form.age?.trim() && <span style={{color:'red', fontSize:'0.6rem'}}> 나이를 입력해주세요</span>}
                         <div>
                             <input  type="text" 
                                     id="age" 
@@ -69,7 +58,20 @@ export default function UserInfo() {
                     </li>
                     <li>
                         <label htmlFor="address">주소</label>
-                        <span style={{color:'red', fontSize:'0.6rem'}}> 주소를 입력해주세요</span>
+                        {!form.address?.trim() && <span style={{color:'red', fontSize:'0.6rem'}}> 주소를 입력해주세요</span>}
+                        <div>
+                            <input  type="text" 
+                                    id="address" 
+                                    name="address"
+                                    value={form.address}
+                                    onChange={handleChange}
+                                    ref={addressRef}
+                                    />
+                        </div>
+                    </li>
+                    <li>
+                        <label htmlFor="job">직업</label>
+                        {!form.address?.trim() && <span style={{color:'red', fontSize:'0.6rem'}}> 주소를 입력해주세요</span>}
                         <div>
                             <input  type="text" 
                                     id="address" 
