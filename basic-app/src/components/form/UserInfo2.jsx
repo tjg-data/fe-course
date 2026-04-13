@@ -35,7 +35,7 @@ export default function UserInfo() {
                 <ul> 
                     {forms.map((item, idx) => 
                         <li key={idx}>
-                            {item.isRequired && <span>✨</span>}
+                            {item.isRequired &&<span>✨</span>}'
                             <label htmlFor="name">{item.label}</label>
                             { !form?.[item.name]?.trim() && <span style={{color:'red', fontSize:'0.6rem'}}> {item.label}을 입력해주세요</span> }
                             <div>
