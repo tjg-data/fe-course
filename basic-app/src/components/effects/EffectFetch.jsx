@@ -19,6 +19,7 @@ export default function EffectFetch() {
         fetchData();
     }, [count]);
 
+
     return(
         <>
             <AvatarList list={data} />
