@@ -14,11 +14,12 @@ export default function RoomList() {
 
     return (
         <div style={{display:'flex'}}>
-            {list.map((item, idx) => 
+            {list.map((item) => 
+            <div key={item.pk}>
                 <RoomAvatar
-                        key={idx}
                         item={item}
                 />
+            </div>
             )}
         </div>
     )
