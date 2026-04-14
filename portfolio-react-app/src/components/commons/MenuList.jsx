@@ -7,7 +7,7 @@ export default function MenuList({ menus, style }) {
                 { menus.map((menu, idx)=>
                     <li key={idx}>
                         <Menu  href={menu.href} 
-                                className={menu.style}
+                                style={menu.style}
                                 name={menu.name} />
                     </li>
                 ) }
