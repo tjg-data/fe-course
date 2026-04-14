@@ -6,7 +6,7 @@
     padding: 10px 0;
     position: relative;
     width:220px;
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
     text-align: center;
 }
 .room_title, .room_date, .room_price {
