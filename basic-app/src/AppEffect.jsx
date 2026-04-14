@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import EffectCounter from './components/effects/EffectCounter.jsx';
+import EffectFetch from './components/effects/EffectFetch.jsx';
 import EffectFetch2 from './components/effects/EffectFetch2.jsx';
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
                 {show? "숨기기": "보이기"}
             </button>
             <hr/> */}
+            <EffectFetch />
             <EffectFetch2 />
         </>
     )
