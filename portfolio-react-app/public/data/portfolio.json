@@ -42,6 +42,24 @@
                     "period":"2010 Oct - 2019 Oct"
                 }
             ]
+        },
+        "skills": {
+            "coding": [
+                        { "title":"HTML",       "value": "98%", "width": "98%"},
+                        { "title":"CSS",        "value": "90%", "width": "90%"},
+                        { "title":"JavaScript", "value": "80%", "width": "80%"},
+                        { "title":"TypeScript", "value": "90%", "width": "90%"},
+                        { "title":"React",      "value": "88%", "width": "88%"},
+                        { "title":"Node.js",    "value": "75%", "width": "75%"}
+                    ],
+            "tools": [
+                        "Visual Studio Code",
+                        "IntelliJ",
+                        "Android Studio",
+                        "Eclipse",
+                        "MySQL Workbench"
+                    ],
+            "etc":  [ "Git", "Scrum Master", "SVN"]
         }
     },
     "footer":{}

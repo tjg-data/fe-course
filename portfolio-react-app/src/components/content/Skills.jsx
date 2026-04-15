@@ -1,7 +1,7 @@
 import { Title, SubTitle, TitleDescription } from "../commons/Titles.jsx"
 import SkillsContent from "./SkillsContent.jsx";
 
-export default function Skills() {
+export default function Skills({ data }) {
     const description = "Lorem ipsum dolor, sit amet consectetur adipisicing elit.";
 
     return (
@@ -9,7 +9,7 @@ export default function Skills() {
             <Title title="My Skills" />
             <SubTitle subTitle="Skills & Attributes" />
             <TitleDescription titleDescription={description} />
-            <SkillsContent />
+            <SkillsContent skills={data}/>
         </section>
     )
 }

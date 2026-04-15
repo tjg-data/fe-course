@@ -8,7 +8,7 @@ export default function Content({ data }) {
         <>
             <Home data={data?.home}/>
             <About data={data?.about}/> 
-            <Skills />
+            <Skills data={data?.skills}/>
         </>
     )
 }
