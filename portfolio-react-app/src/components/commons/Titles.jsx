@@ -7,9 +7,9 @@ export function Description({ description }) {
     )
 }
 
-export function TitleDescription({ TitleDescription }) {
+export function TitleDescription({ titleDescription }) {
     return(
-        <p>{TitleDescription}</p>
+        <p>{titleDescription}</p>
     )
 }
 
