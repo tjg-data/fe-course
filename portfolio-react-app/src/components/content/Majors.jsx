@@ -1,6 +1,7 @@
 import Major from "./Major.jsx";
 
 export default function Majors({ majors }) {
+
     return (
         <ul className="majors">
             { majors?.map((item, idx) =>  
