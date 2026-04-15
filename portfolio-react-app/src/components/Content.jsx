@@ -6,7 +6,7 @@ export default function Content({ data }) {
     return(
         <>
             <Home data={data?.home}/>
-            <About /> 
+            <About data={data?.about}/> 
         </>
     )
 }
