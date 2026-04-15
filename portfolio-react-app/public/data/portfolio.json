@@ -9,6 +9,16 @@
             {"href": "#contact",     "style": "header-menu-item", "name": "Contact"}
         ]
     },
-    "content": {},
+    "content": {
+        "home": {
+            "img": "images/favicon.ico",
+            "alt": "photo",
+            "title": "Junior Developer",
+            "name": "Judy",
+            "description": "A software engineer currently residing in Seoul, South Korea",
+            "href": "#",
+            "menuName": "contact me"
+        }
+    },
     "footer":{}
 }
