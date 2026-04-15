@@ -1,16 +1,6 @@
 import React from 'react';
 
 export default function SkillsCoding({ list }) {
-    // console.log('coding', list);
-    
-    // const skills = [
-    //     { "title":"HTML",       "value": "98%", "width": "98%"},
-    //     { "title":"CSS",        "value": "90%", "width": "90%"},
-    //     { "title":"JavaScript", "value": "80%", "width": "80%"},
-    //     { "title":"TypeScript", "value": "90%", "width": "90%"},
-    //     { "title":"React",      "value": "88%", "width": "88%"},
-    //     { "title":"Node.js",    "value": "75%", "width": "75%"}
-    // ];
     return (
         <ul>
             {list?.map((skill, idx) => 

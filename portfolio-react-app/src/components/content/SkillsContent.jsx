@@ -5,16 +5,6 @@ import SkillsCoding from './SkillsCoding.jsx';
 import SkillsTools from './SkillsTools.jsx';
 
 export default function SkillsContent({skills}) {
-    console.log('skills ->', skills);
-    
-    const tools=[
-        "Visual Studio Code",
-        "IntelliJ",
-        "Android Studio",
-        "Eclipse",
-        "MySQL Workbench"
-    ]
-    const etc = [ "Git", "Scrum Master", "SVN"]
     return (
         <div className="skills">
             <Article style="skills-coding">
