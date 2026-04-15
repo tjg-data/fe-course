@@ -1,5 +1,9 @@
 {
     "header": {
+        "logo": {
+            "img": "images/favicon.ico",
+            "name": "Judy"
+        },
         "menus": [
             {"href": "#home",   "style": "header-menu-item", "name": "Home"},
             {"href": "#about",  "style": "header-menu-item", "name": "About"},
