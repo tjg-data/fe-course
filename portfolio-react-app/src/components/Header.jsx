@@ -8,7 +8,7 @@ export default function Header({ data }) {
     const { menus = [] } = data || {};  
 
     return (
-        <header class="header">
+        <header className="header">
             <Logo   img="/images/favicon.ico"
                     alt="header-logo"
                     style="header-logo-img"

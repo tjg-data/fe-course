@@ -1,7 +1,9 @@
+import Home from "./content/Home.jsx"
+
 export default function Content() {
     return(
         <>
-            <h1>Content component!</h1>
+            <Home />
         </>
     )
 }
