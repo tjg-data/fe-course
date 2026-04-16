@@ -4,6 +4,7 @@ import { fetchData } from './util/fetch.js';
 import Header from './components/Header.jsx';
 import Content from './components/Content.jsx';
 import Footer from './components/Footer.jsx';
+import { Outlet } from 'react-router-dom';
 
 export default function App() {
   const [data, setData] = useState({});
@@ -18,7 +19,8 @@ export default function App() {
   return (
     <>
       <Header data={data?.header} />
-      <Content data={data?.content}/>
+      <Outlet />
+      {/* <Content data={data?.content}/> */}
       <Footer data={data?.footer} />
     </>
   )
