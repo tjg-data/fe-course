@@ -2,6 +2,7 @@ import Home from "./content/Home.jsx"
 import About from "./content/About.jsx"
 import Skills from "./content/Skills.jsx"
 import Work from "./content/Work.jsx"
+import Testimonials from "./content/Testimonials.jsx"
 
 export default function Content({ data }) {
     // console.log('Content :: data :: ', data);    
@@ -11,6 +12,7 @@ export default function Content({ data }) {
             <About data={data?.about}/> 
             <Skills data={data?.skills}/>
             <Work data={data?.work}/>
+            <Testimonials />
         </>
     )
 }
