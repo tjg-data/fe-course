@@ -1,11 +1,11 @@
 import React from 'react';
 import AvatarImage from '../commons/AvatarImage.jsx';
 
-export default function Projects() {
+export default function Projects({ projects }) {
     return (
-        <ul class="projects">
-            {projects.map((project, idx) => 
-                <li className="project">
+        <ul className="projects">
+            {projects?.map((project, idx) => 
+                <li className="project" key={idx}>
                     <AvatarImage    img={project.img}
                                     alt={project.alt}
                                     style="project-img" />

@@ -4,13 +4,13 @@ import Skills from "./content/Skills.jsx"
 import Work from "./content/Work.jsx"
 
 export default function Content({ data }) {
-    // console.log('Content :: data :: ', data?.home);    
+    // console.log('Content :: data :: ', data);    
     return(
         <>
             <Home data={data?.home}/>
             <About data={data?.about}/> 
             <Skills data={data?.skills}/>
-            <Work />
+            <Work data={data?.work}/>
         </>
     )
 }
