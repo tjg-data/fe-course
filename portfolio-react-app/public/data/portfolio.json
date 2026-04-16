@@ -119,7 +119,30 @@
                     "description": "Clone Coding with HTML, CSS"
                 }
             ]
-        }
+        },
+        "testimonials": [
+                {
+                    "img": "images/testimonials/people1.webp",
+                    "alt": "people1",
+                    "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit.Lorem ipsum, dolor sit amet consectetur adipisicing elit",
+                    "name": "James",
+                    "company": "Samsung"
+                },
+                {
+                    "img": "images/testimonials/people2.webp",
+                    "alt": "people2",
+                    "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit.Lorem ipsum, dolor sit amet consectetur adipisicing elit",
+                    "name": "Smith",
+                    "company": "Google"
+                },
+                {
+                    "img": "images/testimonials/people3.webp",
+                    "alt": "people3",
+                    "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit.Lorem ipsum, dolor sit amet consectetur adipisicing elit",
+                    "name": "Anne",
+                    "company": "Samsung"
+                }
+            ]
     },
     "footer":{}
 }

@@ -12,7 +12,7 @@ export default function Content({ data }) {
             <About data={data?.about}/> 
             <Skills data={data?.skills}/>
             <Work data={data?.work}/>
-            <Testimonials />
+            <Testimonials data={data?.testimonials}/>
         </>
     )
 }
