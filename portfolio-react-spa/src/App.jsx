@@ -19,8 +19,7 @@ export default function App() {
   return (
     <>
       <Header data={data?.header} />
-      <Outlet />
-      {/* <Content data={data?.content}/> */}
+      <Outlet context={data?.content}/> 
       <Footer data={data?.footer} />
     </>
   )
