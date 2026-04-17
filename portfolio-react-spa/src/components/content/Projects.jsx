@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AvatarImage from '../commons/AvatarImage.jsx';
 import Modal from './Modal.jsx';
 
-export default function Projects({ projects }) {
+export default function Projects({ projects, like, setLike }) {
     const [selectedProject, setSelectedProject] = useState(null);
     const handleClose = () => {
         setSelectedProject(null);
@@ -30,6 +30,8 @@ export default function Projects({ projects }) {
                 <Modal 
                     project={selectedProject}
                     onClose={()=> setSelectedProject(null)}
+                    like={like}
+                    setLike={setLike}
                 />  
             }
         </>
