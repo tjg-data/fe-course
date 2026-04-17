@@ -11,7 +11,7 @@ export const likeSlice = createSlice({
     reducers: {
         increment: (state, action) => {
             state.count += 1;
-            state.list.push(action.payload.title);             
+            state.list.push(action.payload.title);
         },
         decrement: (state) => {
             state.count -= 1;
