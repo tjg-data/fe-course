@@ -10,7 +10,6 @@ export const skillsSlice = createSlice({
     reducers: {
         add: (state, action) => {
             state.list.push(action.payload);
-            console.log(action.payload);            
         },
     },
 })
