@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 
 export default function Home() {  
     const likeCount = useSelector((state) => state.like.count);
+    const projectList = useSelector((state) => state.like.list);
     const { data } = useOutletContext(); //content 객체 전체
     const { img, alt, title, name, description, href, menuName } = data?.home || {};
     return (
@@ -21,7 +22,8 @@ export default function Home() {
             <Menu   href={href}
                     style="home-contact"
                     name={menuName} />
-            <h1 style={{color:'red'}}>❤좋아요[{likeCount}]</h1>                    
+            <h1 style={{color:'red'}}>❤좋아요[{likeCount}]</h1>   
+            <p>{projectList}</p>                 
         </section>
     )
 }
