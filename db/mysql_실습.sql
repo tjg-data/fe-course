@@ -295,8 +295,7 @@ from employee
 where dept_id = 'SYS'
 order by '입사일' asc, '급여' desc;    
 
-select * from employee
-	limit 10;   
+-- select * from employee limit 10;   
 
     
 
