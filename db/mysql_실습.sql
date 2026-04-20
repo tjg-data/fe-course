@@ -231,6 +231,88 @@ select  emp_id,
 from employee
 where dept_id = 'MKT';        
         
+/***************************************************
+	DISTINCT : 중복된 데이터를 배제하고 조회
+	형식> SELECT DISTINCT [컬럼 리스트..] 
+		 FROM ~
+         WHERE ~
+****************************************************/
+-- 사원테이블에서 부서아이디를 조회
+-- 사원테이블의 부서아이디는 부서테이블의 부서아이디를 참조하므로 다중 조회
+select distinct dept_id	from employee;
+
+-- unique한 키와 함께 조회하는 경우 distinct가 적용되지 않음
+select distinct emp_id, dept_id from employee;
+    
+/***************************************************
+	ORDER BY : 데이터 정렬
+	형식> SELECT [컬럼 리스트..] 
+		 FROM [테이블명]
+         WHERE [조건절]
+         ORDER BY [컬럼명] ASC(오름차순)/DESC(내림차순);
+****************************************************/
+-- 급여를 기준으로 오름차순/내림차순 정렬
+select * 
+	from employee
+    order by salary desc;
+
+-- 모든 사원을 급여, 성별을 기준으로 오름차순 정렬
+select *
+	from employee
+    order by salary, gender asc;
+
+-- eng_name 컬럼이 널인 사원들의 입사일이 가장 최근 순서로 조회
+select *
+	from employee
+    where eng_name is null
+    order by hire_date desc;
+
+-- 퇴직한 사원들을 급여기준으로 내림차순 정렬
+select *
+	from employee
+    where retire_date is not null
+    order by salary desc;
+
+-- 퇴직한 사원들을 급여기준으로 내림차순 정렬
+-- 사번, 사원명, 입사일, 퇴사일, 급여
+-- salary 컬럼의 별칭으로 '급여' 사용
+select  emp_id,						-- (3)
+		emp_name,
+        hire_date,
+        retire_date,
+        salary as '급여'
+	from employee					-- (1)
+    where retire_date is not null   -- (2) 조건절 컬럼명으로 별칭 사용❌
+    order by '급여' desc;			-- (4) 정렬 컬럼명으로 별칭 사용 ⭕
+
+-- 정보시스템(SYS) 부서 사원들 중 입사일이 빠른 순서, 급여를 많이 받는 순서로 정렬
+-- HIRE_DATE, SALARY 컬럼은 '입사일','급여' 별칭으로 컬럼리스트 생성 후 정렬
+select  emp_id,
+		emp_name,
+        hire_date as '입사일',
+        salary as '급여'
+from employee
+where dept_id = 'SYS'
+order by '입사일' asc, '급여' desc;    
+
+select * from employee
+	limit 10;   
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
