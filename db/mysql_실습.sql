@@ -293,21 +293,243 @@ select  emp_id,
         salary as '급여'
 from employee
 where dept_id = 'SYS'
-order by '입사일' asc, '급여' desc;    
+order by '입사일' asc, '급여' desc;   
 
+show databases;
+use hrdb2019;
+select database();
+show tables;
+/***************************************************
+	조건절 + 비교연산자 : 특정 범위 혹은 데이터 검색
+    형식> SELECT [컬럼리스트]
+			FROM [테이블]
+            WHERE [컬럼명] [비교연산자] [값]
+            ORDER BY [컬럼명, ..] ASC/DESC
+****************************************************/
+-- 급여가 5000 이상인 사원들을 조회, 급여를 오름차순 정렬
+select *
+	from employee
+    where salary >= 5000
+    order by salary ;
 
+-- '2017-01-01' 이후 입사한 사원들을 조회
+select *
+	from employee
+    where hire_date > '2017-01-01';
 
+-- 입사일이 2015-01-01 이후이거나, 급여가 6000인 이상인 사원들을 조회 
+-- ~또는, ~이거나 : OR - 두 개의 조건중 하나만 만족해도 조회
+select  *
+	from employee
+    where hire_date > '2015-01-01' or salary >= 6000;
+
+-- 입사일이 2015-01-01 이후이고, 급여가 6000인 이상인 사원들을 조회 
+-- ~이고 : AND - 두 개의 조건이 모두 만족해야만 조회
+select  *
+	from employee
+    where hire_date > '2015-01-01' and salary >= 6000;
     
+-- 특정 범위 : 2015-01-01 ~ 2017-12-31 사이에 입사한 모든 사원 조회
+select *
+	from employee
+    where hire_date >= '2015-01-01' and hire_date <= '2017-12-31';
+    
+-- 급여가 6000 이상 8000 이하인 모든 사원들을 조회
+select *
+	from employee
+    where salary >= 6000 and salary <= 8000;
 
+/***************************************************
+	특정 범위 액세스(논리곱) : BETWEEN ~ AND 
+    형식> SELECT [컬럼리스트]
+			FROM [테이블]  
+            WHERE [컬럼명] BETWEEN  [값1] AND [값2]  
+****************************************************/    
+-- 특정 범위 : 2015-01-01 ~ 2017-12-31 사이에 입사한 모든 사원 조회
+-- BETWEEN ~ AND
+select *
+	from employee
+    where hire_date between '2015-01-01' and '2017-12-31';
 
+-- 급여가 6000 이상 8000 이하인 모든 사원들을 조회
+-- BETWEEN ~ AND
+select * 
+	from employee
+    where salary between 6000 and 8000;
 
+/***************************************************
+	특정 범위 액세스(논리합) : IN (값1, 값2, 값3 ...) 
+    형식> SELECT [컬럼리스트]
+			FROM [테이블]  
+            WHERE [컬럼명] IN (값1, 값2, 값3 ...)   
+****************************************************/
+-- 사원명이 '오삼식', '김삼순', '일지매' 사원들 조회
+select *
+	from employee
+    where  emp_name = '오삼식'
+		or emp_name = '김삼순'
+        or emp_name = '일지매';
 
+-- IN 연산자
+select *
+	from employee
+    where emp_name in ('오삼식','김삼순','일지매');
+        
 
+-- 부서아이디가 MKT, SYS, STG에 속한 모든 사원 조회
+select *
+	from employee
+    where  dept_id = 'MKT'
+		or dept_id = 'SYS'
+        or dept_id = 'STG'
+	order by dept_id ;
 
+-- IN
+select *
+	from employee
+    where dept_id in ('MKT','STG','SYS')
+    order by dept_id;
 
+/***************************************************
+	특정 문자열 검색 : 와일드 문자(%, _) + LIKE 
+					%(전체), _(한글자)
+    형식> SELECT [컬럼리스트]
+			FROM [테이블]  
+            WHERE [컬럼명] LIKE '검색데이터(와일드 문자 포함)'   
+****************************************************/
+-- '한'씨 성을 가진 모든 사원을 조회
+select * from employee
+	where emp_name like '한%';
 
+-- 영어이름이 'f'로 시작하는 모든 사원을 조회
+select * from employee
+	where eng_name like 'f%';
+    
+-- 이메일 두번째 자리에 'a'가 들어가는 모든 사원들을 조회
+select * from employee
+	where email like '_a%';
 
+-- 이메일 아이디가 4자인 모든 사원들을 조회
+select * from employee
+	where email like '____@%';
+    
+-- 부서아이디에 'A'가 들어가는 모든 사원들을 조회
+select * from employee
+	where dept_id like '%A%';
 
+/***************************************************
+	내장함수 : 숫자함수, 문자함수, 날짜함수
+    호출되는 위치 - [컬럼리스트], [조건절의 컬럼명]
+****************************************************/    
+-- [숫자함수]
+-- 함수 실습을 위한 테이블 : DUAL
+-- (1) 절대값 : abs(숫자)
+select	abs(100), abs(-100), 100, -100 from dual;
+
+-- (2) 소수점 절삭 : floor(숫자), truncate(숫자, 자릿수)
+select floor(123.456), truncate(123.456, 0), truncate(123.456, 2)
+	from dual;
+
+-- 사원테이블의 sys 부서 사원들의 사번, 사원명, 부서아이디, 폰번호, 급여, 
+-- 보너스(급여의 25%)컬럼을 추가하여 조회, 보너스는 소수점 1자리 출력
+select  emp_id,
+		emp_name, 
+        dept_id,
+        phone,
+        salary,
+        truncate(salary*0.25, 1) as bonus
+	from employee
+	where dept_id = 'SYS';
+
+-- (3) rand() : 임의의 난수를 발생시키는 함수 (0 ~ 1)
+select rand() from dual;
+
+-- 정수 3자리(0 ~ 999) 사이의 난수 발생
+select floor(rand() * 1000) as number  from dual;
+
+-- 정수 4자리(0 ~ 9999) 사이의 난수 발생, 소수점 2자리 
+select truncate(rand() * 10000, 2) as number from dual;
+
+-- (4) mod(숫자, 나누는 숫자) : 나머지 함수
+select 	mod(123, 2) as odd, 
+		mod(124, 2) as even from dual;
+
+-- 3자리 수를 랜덤으로 발생시켜, 2로 나누어 홀수, 짝수를 구분
+select 	mod(floor((rand()*1000)+1), 2) as result
+		from dual;
+        
+-- [문자함수]
+-- (1) concat(문자열1, 문자열2) : 문자열 결합 함수
+select concat('안녕하세요~', 'MySQL', ' 공부중입니다') as str from dual;  
+
+-- 사원테이블의 사원번호, 사원명, 사원명2 컬럼 조회
+-- 사원명2 컬럼을 데이터 형식 : 예) S0001(홍길동) 
+select  emp_id,
+		emp_name,
+        concat(emp_id, '(', emp_name, ')') as emp_name2
+	from employee;
+
+-- 사번, 사원명, 영어이름, 입사일, 폰번호, 급여를 조회
+-- 영어이름의 출력형식을 '홍길동/hong' 타입으로 출력
+-- 영어이름이 null인 경우에는 'smith'를 기본으로 조회
+select  emp_id,
+		emp_name,
+        concat(emp_name,'/',ifnull(eng_name, 'smith')) as eng_name,
+        hire_date,
+        phone,
+        salary
+	from employee;
+
+-- (2) substring(문자열, 위치, 갯수) : 문자열 추출, 공백도 문자열 포함 
+select 	substring('대한민국 홍길동', 1, 4) as str1,
+		substring('대한민국 홍길동', 6, 3) as str2
+        from dual;   
+
+-- 사원테이블의 사번, 사원명, 입사년도, 입사월, 입사일, 급여를 조회
+select hire_date from employee;  -- 2013-01-01
+select  emp_id,
+		emp_name,
+        substring(hire_date, 1, 4) as year,
+        substring(hire_date, 6, 2) as month,
+        substring(hire_date, 9, 2) as day,
+        salary
+	from employee;
+        
+-- 2015년도 입사한 모든 사원 조회
+select *
+	from employee
+    where substring(hire_date, 1, 4) = '2015';
+
+-- 2018년도에 입사한 정보시스템(sys) 부서 사원 조회
+select *
+	from employee
+    where substring(hire_date, 1, 4) = '2018'
+		and dept_id = 'sys';
+
+-- (3) left(문자열, 갯수), right(문자열, 갯수) : 왼쪽, 오른쪽 기준으로 문자열 추출
+select 	left(curdate(), 4) as year,
+		substring(curdate(), 6, 2) as month,
+        right(curdate(), 2) as day
+    from dual;
+
+-- 2018년도에 입사한 모든 사원 조회
+select *
+	from employee
+    where left(hire_date, 4) = '2018';
+
+-- 2015년부터 2017년 사이에 입사한 모든 사원 조회
+select *
+	from employee
+    where left(hire_date, 4) between '2015' and '2017';
+
+-- 사원번호, 사원명, 입사일, 폰번호, 급여를 조회
+-- 폰번호는 마지막 4자리만 출력
+select  emp_id,
+		emp_name,
+        hire_date,
+        right(phone, 4) as phone,
+        salary
+	from employee;
 
 
 
