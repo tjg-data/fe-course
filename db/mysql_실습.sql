@@ -252,7 +252,7 @@ select distinct emp_id, dept_id from employee;
          ORDER BY [컬럼명] ASC(오름차순)/DESC(내림차순);
 ****************************************************/
 -- 급여를 기준으로 오름차순/내림차순 정렬
-select * 
+select *  
 	from employee
     order by salary desc;
 
@@ -295,7 +295,7 @@ from employee
 where dept_id = 'SYS'
 order by '입사일' asc, '급여' desc;    
 
--- select * from employee limit 10;   
+
 
     
 
