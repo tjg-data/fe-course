@@ -531,6 +531,140 @@ select  emp_id,
         salary
 	from employee;
 
+-- (4) upper(문자열), lower(문자열) : 대,소문자로 치환
+select  upper('welcomeToMysql!!') as upper, 
+		lower('welcomeToMysql!!') as lower
+	from dual;
+
+-- 사번, 사원명, 영어이름, 부서아이디, 이메일, 급여를 조회
+-- 영어이름은 대문자, 부서아이디는 소문자, 이메일은 대문자
+select  emp_id,
+		emp_name,
+        upper(ifnull(eng_name, '')) as eng_name,
+        lower(dept_id) as dept_id,
+        upper(email) as email,
+        salary
+	from employee;
+
+-- (5) trim(문자열) : 앞, 뒤 공백제거
+select  trim('     대한민국') as t1,
+		trim('대한민국     ') as t2,
+        trim('     대한민국     ') as t3,
+        trim('     대한  민국   ') as t4
+	from dual;
+    
+-- (6) format(문자열, 소수점자리) : 문자열 포맷 - 3자리 콤마 구분
+select  format(123456, 0) as format1,
+		format('123456', 0) as format2
+	from dual;
+
+-- 사번, 사원명, 입사일, 폰번호, 급여, 보너스(급여의 20%)를 조회
+-- 급여, 보너스는 소수점 없이 3자리 콤마(,)로 구분하여 출력
+-- 급여가 null인 경우에는 기본값 0 
+-- 2016년부터 2017년 사이에 입사한 사원
+-- 사번 기준으로  내림차순 정렬 
+select  emp_id,
+		emp_name,
+        hire_date,
+        phone,
+        concat(format(ifnull(salary,0), 0), '원') as salary,
+        concat(format(salary*0.2, 0), '원') as bonus
+	from employee
+    where left(hire_date,4) between '2016' and  '2017'
+	order by emp_id desc;
+    
+-- [날짜 함수]
+-- curdate() : 년-월-일 형식으로 현재날짜 출력
+-- sysdate(), now() : 년-월-일-시-분-초  형식으로 현재날짜 출력
+select  curdate() as today1,
+		sysdate() as today2,
+        now() as today3
+ from dual; 
+ 
+-- [형변환 함수]
+-- cast(변환값 as 데이터타입) 
+-- convert(변환값 as 데이터타입) :: MySQL OLD 
+select 123 as number, cast(123 as char) as str from dual;
+select 	'1234' as str, 
+		cast('1234' as signed integer) as number
+	from dual;
+select  '20260421' as str,
+		cast('20260421' as date) as date1
+	from dual;
+
+-- now()
+select  now() as date,
+		cast(now() as char) as string,
+        cast(cast(now() as char) as date) as date
+	from dual;
+
+-- signed integer, unsigned integer, decimal
+select  '1234' as string,
+		cast('1234' as signed integer) as cast_int,
+		cast('1234' as unsigned integer) as cast_int,
+		cast('1234' as decimal(10, 2)) as cast_decimal
+	from dual;
+
+-- [문자열 치환 함수]
+-- replace(문자열, old, new)
+select  '홍-길-동' as old,
+		replace('홍-길-동', '-', '/') as new
+	from dual;
+
+-- 사원테이블의 사번, 사원명, 입사일, 퇴사일, 부서아이디, 폰번호, 급여를 조회
+-- 입사일, 퇴사일 출력은 '-'을 '/'로 치환하여 출력
+-- 재직중인 사원은 현재날짜를 출력
+-- 급여 출력시 3자리 콤마(,) 구분  
+select  emp_id,
+		emp_name,
+        replace(hire_date, '-', '/') as hire_date,
+        replace(ifnull(retire_date, curdate()), '-', '/') as retire_date,
+        dept_id,
+        phone,
+        format(salary, 0) as salary
+	from employee;
+
+-- '20150101' 입력된 날짜를 기준으로 해당 날짜 이후에 입사한 사원들을 모두 조회
+-- 모든 mysql 데이터베이스에서 적용 가능한 형태로 작성
+select *
+	from employee
+    where hire_date >= cast('20150101' as date);
+
+-- '20150101' ~ '20171231' 사이에 입사한 사원들을 모두 조회
+-- 모든 mysql 데이터베이스에서 적용 가능한 형태로 작성
+select *
+	from employee
+    where hire_date between cast('20150101' as date)
+						and cast('20171231' as date);
+
+/***************************************************
+	집계(그룹) 함수 : sum(), avg(), count(), min(), max().. 
+    group by - 그룹함수를 적용하기 위한 그룹핑 컬럼 정의 
+    having - 그룹함수에서 사용하는 조건절
+    ** 그룹함수는 그룹핑이 가능한 컬럼에 적용하는것이 Good!!
+****************************************************/ 
+select * from employee;
+-- (1) sum(숫자) : 전체 총합을 구하는 함수
+-- 사원테이블의 총 급여를 조회, 
+-- 2026-04-21 기준 급여가 null이면 0으로 기본값 정의
+select concat(format(sum(ifnull(salary,0)), 0), '원') as 총급여 
+	from employee;  
+
+-- (2) avg(숫자) : 전체 평균을 구하는 함수
+-- 사원들의 전체 급여 평균을 조회, 3자리씩 ','로 구분하고 앞에 '$' 표시
+-- 2026-04-21 기준 급여가 null이면 0으로 기본값 정의, 소수점은 절삭
+select  concat('$', format(floor(avg(ifnull(salary, 0))), 0)) as avg
+	from employee;
+
+-- 정보시스템(sys) 부서 전체의 급여 총액과 평균을 조회
+-- 3자리 구분, 마지막 '만원' 표시
+select  concat(format(sum(salary), 0), '만원') as sum,
+		concat(format(avg(salary), 0), '만원') as avg
+	from employee
+    where dept_id = 'sys';
+
+        
+    
 
 
 
