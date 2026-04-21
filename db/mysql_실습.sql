@@ -663,7 +663,10 @@ select  concat(format(sum(salary), 0), '만원') as sum,
 	from employee
     where dept_id = 'sys';
 
-        
+	
+    
+    
+
     
 
 
