@@ -663,11 +663,141 @@ select  concat(format(sum(salary), 0), '만원') as sum,
 	from employee
     where dept_id = 'sys';
 
-	
-    
-    
+-- (3) max(숫자) : 최대값을 구하는 함수
+-- 사원테이블에서 가장 높은 급여를 받는 사원 조회
+use hrdb2019;
+select database();
+select concat(format(max(salary), 0), '만원') as 최고급여 from employee;
 
+-- (4) mix(숫자) : 최소값을 구하는 함수
+-- 사원테이블에서 가장 낮은 급여를 받는 사원 조회
+select concat(format(min(salary), 0), '만원') as 최소급여 from employee;
     
+-- 사원들의 총급여, 평균급여, 최대급여, 최소급여를 조회
+-- 3자리 구분, 화폐단위 '만원' 추가
+-- 현재날짜 기준 급여컬럼이 null인 경우에는 0으로 치환
+select  concat(format(sum(ifnull(salary, 0)), 0), '만원') as 총급여,
+		concat(format(avg(ifnull(salary, 0)), 0), '만원') as 평균급여,
+		concat(format(max(ifnull(salary, 0)), 0), '만원') as 최대급여,
+		concat(format(min(ifnull(salary, 0)), 0), '만원') as 최소급여
+	from employee;
+
+-- (5) count(컬럼) : 조건에 맞는 데이터의 row 수를 조회, null은 제외
+-- 사원테이블의 전체 로우수
+select count(*) from employee; 		-- 20
+select count(salary) from employee; -- 19
+select count(emp_id) from employee; -- 20
+
+-- 재직중인 사원수 조회 : 16
+select count(*)
+	from employee
+    where retire_date is null;
+
+select  count(*) - count(retire_date) as '재직자',
+		count(retire_date) as '퇴사자'
+		from employee;
+
+-- 퇴사한 사원수 조회	
+select count(retire_date) from employee;
+    
+-- '2015년'에 입사한 사원수 조회
+select count(*)
+	from employee
+    where left(hire_date, 4) = '2015';
+
+-- 정보시스템(SYS) 부서의 사원수 조회
+select count(*)
+	from employee
+    where dept_id = 'sys';
+    
+-- 가장 빠른 입사자, 가장 늦은 입사자의 입사일을 조회    
+select  min(hire_date), 
+		max(hire_date)
+	from employee;
+
+-- 가장 빠른 입사자의 정보 조회
+select *
+	from employee
+    where hire_date  = '2013-01-01';
+
+select *
+	from employee
+    where hire_date  = (select min(hire_date) from employee);
+
+-- [group by] : ~별, 부서별 사원수, 입사날짜별 총급여.. 
+-- 그룹함수와 일반컬럼은 함께 사용 불가, 사용을 하려면 일반컬럼을 group by로 그룹핑 진행
+-- 단, group by 대상인 일반 컬럼은 그룹핑이 가능해야함
+select count(salary), salary  
+	from employee
+    group by salary;  -- salary 데이터를 그룹핑한 후 count(salary) 적용
+    
+-- 부서별 사원수, 총급여, 평균급여 조회
+-- null은 0으로 치환
+-- 3자리 구분, 소수점 절삭
+select 	dept_id as 부서ID, 
+		count(*) as 사원수, 
+        format(sum(ifnull(salary,0)), 0) as 총급여, 
+        format(floor(avg(ifnull(salary,0))), 0) as 평균급여,
+        format(max(ifnull(salary,0)), 0) as 최대급여,
+        format(min(ifnull(salary,0)), 0) as 최소급여
+	from employee
+    group by dept_id;
+
+-- 입사년도별, 사원수, 총급여, 평균급여, 최대급여, 최소급여 조회
+-- 소수점 X, 3자리 구분
+select 	left(hire_date, 4) as '입사년도', 
+		count(*) as '사원수',
+        format(sum(salary), 0) as '총급여',
+        format(truncate(avg(salary), 0), 0) as '평균급여',
+        format(max(salary), 0) as '최대급여',
+        format(min(salary), 0) as '최소급여'
+	from employee
+    group by left(hire_date, 4);
+
+-- [having 조건절] 그룹함수 또는 group by 결과에 대한 조건을 정의 
+-- 부서별 총급여 조회
+-- 총급여가 30000 이상인 부서만 출력
+select 	dept_id, 
+		sum(ifnull(salary, 0)) as '총급여'
+	from employee    
+    group by dept_id
+    having sum(ifnull(salary, 0)) >= 30000;
+    -- having '총급여' >= 30000;  
+
+-- 연도별, 사원수, 총급여, 평균급여, 최대급여, 최소급여 조회
+-- 소수점 X, 3자리 구분
+-- 총급여가 30000 이상인 년도 출력
+-- 급여 협상이 안된 사원은 제외
+select 	left(hire_date, 4) as '입사년도', 
+		count(*) as '사원수',
+        format(sum(salary), 0) as '총급여',
+        format(truncate(avg(salary), 0), 0) as '평균급여',
+        format(max(salary), 0) as '최대급여',
+        format(min(salary), 0) as '최소급여'
+from employee
+where salary is not null
+group by left(hire_date, 4)
+having sum(salary) > 30000;
+
+-- [rollup 함수] 리포팅을 위한 함수
+-- 부서별 사원수, 총급여, 평균급여 조회
+select  dept_id as '부서ID',
+		count(*) as '사원수',
+		sum(ifnull(salary, 0)) as '총급여',
+        floor(avg(ifnull(salary, 0))) as '평균급여'
+from employee
+group by dept_id with rollup;
+
+-- rollup한 결과의 부서아이디를 추가
+select  if(grouping(dept_id), '총합계', ifnull(dept_id, '-')) as dept_id,
+		count(*) as '사원수',
+		sum(ifnull(salary, 0)) as '총급여',
+        floor(avg(ifnull(salary, 0))) as '평균급여'
+from employee
+group by dept_id with rollup;
+
+-- 연도별, 사원수, 총급여, 평균급여, 최대급여, 최소급여 조회, rollup 함수 적용
+
 
 
 
