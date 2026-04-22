@@ -811,7 +811,80 @@ from employee,
 where employee.emp_id = T1.emp_id and salary is not null
 group by year with rollup;
 
+-- [limit 함수] 출력갯수를 제한하여 조회
+-- 오라클의 rownum 함수와 동일
 
+-- 전체 사원 리스트 중 상위 5개만 출력
+select * from employee limit 5;
+
+-- 최대 급여를 받는 사원을 순서대로 3명 조회
+select * 
+	from employee
+    order by salary desc
+    limit 3;
+
+
+/*******************************************************
+	조인(JOIN) : 두 개이상의 테이블을 연동하여 하나의 데이셋 구성
+    ERD(Entity Relationship Diagram): 데이터베이스 설계도(구조도)
+    
+    ** ANSI SQL : 데이터베이스 시스템들의 표준 SQL **
+    ** 조인(JOIN) 종류 **
+    (1) CROSS JOIN(CATEISIAN:카테이션) - 합집합
+        : 테이블의 데이터 전체를 조인 
+        예) 테이블1(10개) * 테이블2(10개) = 100개
+	(2) INNER JOIN(EQUI) - 교집합
+		: 두 개이상의 테이블들이 조인연결고리를 통해 조인 실행
+	(3) OUTER JOIN - INNER JOIN + 조인에서 제외한 ROW 포함
+		LEFT OUTER JOIN - 왼쪽의 테이블의 ROW 포함
+        RIGHT OUTER JOIN - 오른쪽 테이블의 ROW 포함
+	(4) SELF JOIN - 한(자신) 테이블을 두 개(자신, 사본)의 테이블처럼 조인        
+********************************************************/ 
+-- [CROSS JOIN]
+-- 형식1> SELECT [컬럼리스트] 
+-- 		FROM  [테이블1] CORSS JOIN [테이블2]
+-- 		WHERE [조건절]
+-- 형식2> SELECT [컬럼리스트] 
+-- 		FROM  [테이블1], [테이블2]
+-- 		WHERE [조건절]
+
+-- employee, department cross join
+select count(*) from employee;  -- 20
+select count(*) from department; -- 7
+select count(*) from unit; 		 -- 3
+
+select count(*)  from employee 
+					cross join department
+                    cross join unit;  -- 420
+select count(*) from employee, department, unit; -- 420
+
+-- 사원, 휴가, 부서 테이블을 cross join
+select count(*) from employee;  	-- 20
+select count(*) from vacation; 		-- 102
+select count(*) from department;	-- 7
+
+select count(*) from employee
+					cross join vacation
+                    cross join department; -- 14280
+select count(*) from employee, vacation, department;  -- 14280        
+
+-- [INNER JOIN(EQUI JOIN)] 
+-- 형식1> SELECT [컬럼리스트]
+-- 		 FROM [테이블1] INNER JOIN [테이블2]   
+-- 					   ON [테이블1.조인컬럼] = [테이블2.조인컬럼]  
+-- 형식2> SELECT [컬럼리스트]
+-- 		 FROM [테이블1],[테이블2]   
+-- 		 WHERE [테이블1.조인컬럼] = [테이블2.조인컬럼]  
+
+select count(*) from employee inner join department
+					on employee.dept_id = department.dept_id;  -- 20
+
+select count(*)
+	from employee, department
+    where employee.dept_id = department.dept_id; -- 20
+    
+
+						
 
 
 
