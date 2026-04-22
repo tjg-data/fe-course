@@ -797,6 +797,25 @@ from employee
 group by dept_id with rollup;
 
 -- 연도별, 사원수, 총급여, 평균급여, 최대급여, 최소급여 조회, rollup 함수 적용
+-- 💥‼ grouping 함수안에는 함수를 넣을수 없음,
+-- 💥if(grouping(left(hire_date, 4)), '총합계', ifnull(left(hire_date, 4), '-')) as hire_date,
+select 	if(grouping(year), '총합계', ifnull(year, '-')) as hire_date,
+		count(*) as '사원수',
+        format(sum(salary), 0) as '총급여',
+        format(truncate(avg(salary), 0), 0) as '평균급여',
+        format(max(salary), 0) as '최대급여',
+        format(min(salary), 0) as '최소급여'
+from employee,
+	 (select emp_id, left(hire_date, 4) year
+		from employee) T1
+where employee.emp_id = T1.emp_id and salary is not null
+group by year with rollup;
+
+
+
+
+
+
 
 
 
