@@ -883,8 +883,46 @@ select count(*)
 	from employee, department
     where employee.dept_id = department.dept_id; -- 20
     
+-- 사원테이블, 부서테이블, 본부테이블 inner join
+select *
+	from employee e inner join department d
+					on e.dept_id = d.dept_id
+                    inner join unit u
+                    on d.unit_id = u.unit_id;
 
-						
+select * 
+	from employee e, department d, unit u
+    where e.dept_id = d.dept_id
+		and d.unit_id = u.unit_id;
+                    
+-- 모든 사원들의 사원번호, 사원명, 부서아이디, 부서명, 입사일, 급여를 조회
+select e.emp_id, emp_name, d.dept_id, d.dept_name, hire_date, salary
+	from employee e, department d
+    where e.dept_id = d.dept_id;
+                    
+-- '영업'에 속한 사원들의 사원명, 입사일, 퇴사일, 급여, 부서아이디, 부서명 조회
+-- 재직중인 사원은 현재날짜로 출력						
+select  e.emp_name,
+		e.hire_date,
+        ifnull(e.retire_date, curdate()) as retire_date,
+        e.salary,
+        d.dept_id,
+        d.dept_name
+	from employee e, department d
+    where e.dept_id = d.dept_id
+		and d.dept_name = '영업';
+
+-- '2015'년도에 입사자들의 사번, 사원명, 입사일, 부서명, 본부아이디, 본부명을 조회
+select  e.emp_id,
+		e.emp_name,
+        e.hire_date,
+        d.dept_name,
+        u.unit_id,
+        u.unit_name
+	from employee e, department d, unit u
+    where e.dept_id = d.dept_id
+		and d.unit_id = u.unit_id
+        and left(e.hire_date, 4) = '2015';
 
 
 
