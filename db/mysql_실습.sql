@@ -1074,7 +1074,8 @@ select  u.unit_id,
 	from employee e inner join department d on e.dept_id = d.dept_id
 					inner join unit u 		on d.unit_id = u.unit_id
                     inner join vacation v	on e.emp_id = v.emp_id
-    group by u.unit_id, d.dept_id, e.emp_id;    
+    group by u.unit_id, d.dept_id, e.emp_id;   
+
 
 -- [OUTER JOIN] 
 -- 오라클 INNER JOIN(EQUI JOIN) 문법에 (+) 코드를 추가하여 사용
@@ -1124,9 +1125,17 @@ from employee e right outer join department d on e.dept_id = d.dept_id
                 left outer join vacation v on e.emp_id = v.emp_id
 group by u.unit_id, d.dept_id
 order by sum(ifnull(v.duration, 0)) desc;
+
+-- 	EXPLAIN
+-- 	-> Sort: `휴가사용일수` DESC  (actual time=0.389..0.39 rows=7 loops=1)
+--      -> Table scan on <temporary>  (actual time=0.374..0.375 rows=7 loops=1)
+--          -> Aggregate using temporary table  (actual time=0.373..0.373 rows=7 loops=1)
+--              -> ...
 				
+                
 -- 2017년부터 2018년도까지 입사한 사원들의 사원명, 입사일, 연봉, 부서명, 본부명 조회
 -- 단, 퇴사한 사원들 제외
+-- explain analyze 
 select  e.emp_name,
 		e.hire_date,
         e.salary,
@@ -1134,8 +1143,13 @@ select  e.emp_name,
         u.unit_name
 from employee e right outer join department d on e.dept_id = d.dept_id
 				left outer join unit u on d.unit_id = u.unit_id
-where left(hire_date, 4) between '2017' and '2018' 
+where left(e.hire_date, 4) between '2017' and '2018' 
 	and e.retire_date is null;   -- 17  
+
+-- -> Nested loop left join  (cost=3.65 rows=2) (actual time=0.0489..0.0565 rows=3 loops=1)
+--      -> Nested loop inner join  (cost=2.95 rows=2) (actual time=0.0457..0.0517 rows=3 loops=1)
+--          -> Filter: ((left(e.hire_date,4) between '2017' and '2018') and...    
+
 
 select  e.emp_name,
 		e.hire_date,
@@ -1148,16 +1162,107 @@ from (select emp_name, hire_date, salary, dept_id
 									on e.dept_id = d.dept_id
 									left outer join unit u 
                                     on d.unit_id = u.unit_id
-where left(hire_date, 4) between '2017' and '2018';    -- 17             
+where left(e.hire_date, 4) between '2017' and '2018';    -- 17             
 
+-- [SELF JOIN] 자신의 테이블을 조인
+-- SELF 조인은 서브쿼리 형식으로 변환하여 사용됨!
+-- 형식1> SELECT [컬럼리스트]
+-- 	    FROM [테이블원본] LEFT/RIGHT JOIN [테이블사본]
+--      				ON [테이블원본.조인컬럼] = [테이블사본.조인컬럼]
+-- 형식2> SELECT [컬럼리스트]
+-- 	    FROM [테이블원본], [테이블사본]
+--      WHERE [테이블원본.조인컬럼] = [테이블사본.조인컬럼]
+select *
+	from employee e1, employee e2
+    where e1.emp_id = e2.emp_id;
 
- 
+select *
+	from employee e1 left join employee e2 
+					 on e1.emp_id = e2.emp_id;
 
+ /*******************************************************
+	서브쿼리(SubQuery) : 메인 쿼리에 다른 쿼리를 추가하여 실행방식
+    -> (쿼리작성) 괄호안에 쿼리를 작성하여 메인쿼리에 추가
+    형식> SELECT [컬럼리스트 추가 -> (스칼라 서브쿼리)] 🔅오라클사용❌
+		 FROM [테이블명 추가 -> (인라인뷰)]
+         WHERE [조건절 -> (서브쿼리 : 단일행, 다중행)]
+********************************************************/                     
+-- [서브쿼리 : 단일행 - '='로 비교함]
+-- '정보시스템' 부서의 사원들의 사번, 사원명, 입사일, 부서아이디, 급여 조회
+select  emp_id,
+		emp_name,
+        hire_date,
+        dept_id,
+        salary
+	from employee
+    where dept_id = (select dept_id from department 
+						where dept_name = '정보시스템');
 
+select dept_id 
+	from department 
+	where dept_name = '정보시스템';                        
+--
+select  e.emp_id,
+		e.emp_name,
+        e.hire_date,
+        d.dept_id,
+        e.salary
+	from employee e, department d
+	where e.dept_id = d.dept_id
+		and d.dept_name = '정보시스템';      
+        
+-- [서브쿼리: 단일행]        
+-- 홍길동 사원이 속한 부서아이디, 부서명, 부서오픈일 조회
+select  dept_id from employee where emp_name = '홍길동';     
 
+select  dept_id,
+		dept_name,
+        start_date
+	from department
+    where dept_id = (select  dept_id from employee 
+							where emp_name = '홍길동');
 
+-- [서브쿼리 : 단일행]
+-- 홍길동 사원의 휴가사용 내역을 조회
+select emp_id from employee where emp_name='홍길동';                            
+select 	vacation_id,
+		emp_id,
+        (select emp_name from employee 
+				where emp_name = '홍길동') as emp_name, -- 권장❌
+        begin_date,
+        end_date,
+        reason,
+        duration
+	from vacation
+    where emp_id = (select emp_id from employee where emp_name='홍길동');
+    
+-- [서브쿼리 : 단일행]
+-- '제3본부'에 속한 모든 부서를 조회
+select unit_id from unit where unit_name='제3본부';   
+select *
+	from department
+    where unit_id = (select unit_id from unit where unit_name='제3본부');
 
+-- [서브쿼리 : 단일행]
+-- 최고 연봉을 받는 사원의 정보를 조회 
+select max(salary) from employee;
+select *
+	from employee
+    where salary = (select max(salary) from employee);
 
+-- [서브쿼리 : 단일행]
+-- 최근에 입사한 사원의 정보를 조회
+select max(hire_date) from employee;
+select *
+	from employee
+    where hire_date = (select max(hire_date) from employee);
+
+-- [서브쿼리 : 단일행]
+-- 가장 먼저 퇴사한 사람의 정보
+select min(retire_date) from employee;    
+select *
+	from employee
+    where retire_date = (select min(retire_date) from employee);
 
 
                       
