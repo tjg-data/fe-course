@@ -1111,6 +1111,56 @@ select  d.dept_id,
         ifnull(u.unit_name, '준비중') as unit_name
 	from department d left outer join unit u
 					  on d.unit_id = u.unit_id;
+
+-- 본부별, 부서의 휴가 사용일수를 조회
+-- 부서의 누락없이 모두 출력
+select  u.unit_id,
+		u.unit_name,
+        d.dept_id,
+        d.dept_name,
+        sum(ifnull(v.duration, 0)) as '휴가사용일수'
+from employee e right outer join department d on e.dept_id = d.dept_id
+				left outer join unit u on d.unit_id = u.unit_id
+                left outer join vacation v on e.emp_id = v.emp_id
+group by u.unit_id, d.dept_id
+order by sum(ifnull(v.duration, 0)) desc;
+				
+-- 2017년부터 2018년도까지 입사한 사원들의 사원명, 입사일, 연봉, 부서명, 본부명 조회
+-- 단, 퇴사한 사원들 제외
+select  e.emp_name,
+		e.hire_date,
+        e.salary,
+        d.dept_name,
+        u.unit_name
+from employee e right outer join department d on e.dept_id = d.dept_id
+				left outer join unit u on d.unit_id = u.unit_id
+where left(hire_date, 4) between '2017' and '2018' 
+	and e.retire_date is null;   -- 17  
+
+select  e.emp_name,
+		e.hire_date,
+        e.salary,
+        d.dept_name,
+        u.unit_name
+from (select emp_name, hire_date, salary, dept_id
+		from employee 
+		where retire_date is null) e right outer join department d 
+									on e.dept_id = d.dept_id
+									left outer join unit u 
+                                    on d.unit_id = u.unit_id
+where left(hire_date, 4) between '2017' and '2018';    -- 17             
+
+
+ 
+
+
+
+
+
+
+
+
+                      
    
 
 
