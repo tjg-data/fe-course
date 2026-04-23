@@ -835,7 +835,7 @@ select *
         예) 테이블1(10개) * 테이블2(10개) = 100개
 	(2) INNER JOIN(EQUI) - 교집합
 		: 두 개이상의 테이블들이 조인연결고리를 통해 조인 실행
-	(3) OUTER JOIN - INNER JOIN + 조인에서 제외한 ROW 포함
+	(3) OUTER JOIN - INNER JOIN + INNER JOIN 조인에서 제외한 ROW 포함
 		LEFT OUTER JOIN - 왼쪽의 테이블의 ROW 포함
         RIGHT OUTER JOIN - 오른쪽 테이블의 ROW 포함
 	(4) SELF JOIN - 한(자신) 테이블을 두 개(자신, 사본)의 테이블처럼 조인        
@@ -986,14 +986,132 @@ select  e.emp_name,
     where d.dept_name = '영업'
         and v.reason = '두통';
         
-        
+-- 2014년부터 2016년까지 입사한 사원들 중에서 퇴사하지 않은 사원들의
+-- 사원아이디, 사원명, 부서명, 입사일, 소속본부를 조회 
+-- 소속본부 기준으로 오름차순 정렬  
+select  e.emp_id,
+		e.emp_name,
+        d.dept_name,
+        e.hire_date,
+        u.unit_name
+	from employee e, department d, unit u
+    where e.dept_id = d.dept_id
+		and d.unit_id = u.unit_id
+        and left(hire_date, 4) between '2014' and '2016'
+        and retire_date is null
+	order by u.unit_id asc;
 
-        
+select  e.emp_id,
+		e.emp_name,
+        d.dept_name,
+        e.hire_date,
+        u.unit_name
+	from employee e inner join department d on e.dept_id = d.dept_id
+					inner join unit u on d.unit_id = u.unit_id                           
+    where left(e.hire_date, 4) between '2014' and '2016'
+			and retire_date is null
+	order by u.unit_id asc;      
 
+-- 부서별 그룹핑하여 부서명, 부서아이디, 총급여, 평균급여, 휴가사용일수 조회
+-- 평균급여는 소수점2자리, 총급여, 평균급여는 3자리 구분
+select  d.dept_name as '부서아이디',
+		d.dept_id as '부서명',
+        concat(format(sum(e.salary), 0), '원') as '총급여',
+        concat(format(truncate(avg(e.salary), 2), 0), '원') as '평균급여',
+        count(v.emp_id) as '휴가사용일수'
+	from employee e, department d, vacation v
+    where e.dept_id = d.dept_id
+		and e.emp_id = v.emp_id
+	group by d.dept_id, d.dept_name;
 
+select  d.dept_name as '부서아이디',
+		d.dept_id as '부서명',
+        concat(format(sum(e.salary), 0), '원') as '총급여',
+        concat(format(truncate(avg(e.salary), 2), 0), '원') as '평균급여',
+        count(v.emp_id) as '휴가사용일수'
+	from employee e inner join department d on e.dept_id = d.dept_id
+					inner join vacation v  on e.emp_id = v.emp_id
+	group by d.dept_id, d.dept_name;    
 
+-- 본부별 휴가사용 일수를 조회
+select  u.unit_id,
+		u.unit_name,
+        sum(v.duration)  -- 휴가 사용 일수
+	from employee e, department d, unit u, vacation v
+    where e.dept_id = d.dept_id
+		and d.unit_id = u.unit_id
+        and e.emp_id = v.emp_id
+    group by u.unit_id;
 
+-- 본부별 > 부서별로 그룹핑 한후 부서의 휴가사용 일수를 조회
+select  u.unit_id,
+		u.unit_name,
+        d.dept_name, 
+        sum(v.duration)  -- 휴가 사용 일수
+	from employee e, department d, unit u, vacation v
+    where e.dept_id = d.dept_id
+		and d.unit_id = u.unit_id
+        and e.emp_id = v.emp_id
+    group by u.unit_id, d.dept_id;
 
+-- 본부별 > 부서별 > 사원별로 그룹핑 한후 부서의 휴가사용 일수를 조회
+select  u.unit_id,
+		u.unit_name,
+        d.dept_name, 
+        e.emp_name,
+        sum(v.duration)  -- 휴가 사용 일수
+	from employee e, department d, unit u, vacation v
+    where e.dept_id = d.dept_id
+		and d.unit_id = u.unit_id
+        and e.emp_id = v.emp_id
+    group by u.unit_id, d.dept_id, e.emp_id;    
+
+select  u.unit_id,
+		u.unit_name,
+        d.dept_name, 
+        e.emp_name,
+        sum(v.duration)  -- 휴가 사용 일수
+	from employee e inner join department d on e.dept_id = d.dept_id
+					inner join unit u 		on d.unit_id = u.unit_id
+                    inner join vacation v	on e.emp_id = v.emp_id
+    group by u.unit_id, d.dept_id, e.emp_id;    
+
+-- [OUTER JOIN] 
+-- 오라클 INNER JOIN(EQUI JOIN) 문법에 (+) 코드를 추가하여 사용
+-- 현재 오라클 문법은 MySQL에서는 사용 불가 
+-- 형식1> SELECT [컬럼리스트]
+-- 		 FROM [테이블1] LEFT/RIGHT OUTER JOIN [테이블2]   
+-- 					   ON [테이블1.조인컬럼] = [테이블2.조인컬럼]  
+
+select count(distinct dept_id) from employee;  -- 6
+select count(dept_id) from department; -- 7
+
+-- LEFT OUTER JOIN : LEFT에 부서테이블 위치
+-- 부서별 사원수 조회, 전체 부서 출력!!
+select  d.dept_id,
+		d.dept_name,
+		count(emp_id) as '사원수'
+	from department d left outer join employee e
+					  on d.dept_id = e.dept_id
+    group by d.dept_id;
+
+-- RIGHT OUTER JOIN : RIGHT에 부서테이블 위치
+-- 부서별 사원수 조회, 전체 부서 출력!!
+select  d.dept_id,
+		d.dept_name,
+		count(emp_id) as '사원수'
+	from employee e right outer join department d
+					  on d.dept_id = e.dept_id
+    group by d.dept_id;
+
+-- 모든 부서의 아이디, 부서명, 본부명을 조회
+-- 본부에 속하지 않은 부서는 '준비중'으로 출력
+select  d.dept_id,
+		d.dept_name,
+        ifnull(u.unit_name, '준비중') as unit_name
+	from department d left outer join unit u
+					  on d.unit_id = u.unit_id;
+   
 
 
 
