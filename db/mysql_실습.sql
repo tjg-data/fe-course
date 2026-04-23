@@ -924,9 +924,71 @@ select  e.emp_id,
 		and d.unit_id = u.unit_id
         and left(e.hire_date, 4) = '2015';
 
+use hrdb2019;
+select database();
 
+-- 인사과에 속한 사원들 중에 휴가를 사용한 사원의 내역 조회
+-- 부서명은 '인사'
+select *
+	from employee e, department d, vacation v
+    where e.dept_id = d.dept_id
+		and e.emp_id = v.emp_id
+        and d.dept_name = '인사';
 
+select *
+	from employee e inner join department d on e.dept_id = d.dept_id
+					inner join vacation v on e.emp_id = v.emp_id
+	where d.dept_name = '인사';
+    
+-- 사원별 휴가사용 일수를 조회, 사원아이디, 사원명, 휴가일수 출력
+-- 사용일수 기준 내림차순 정렬, 상위 5명 출력
+select 	e.emp_id,
+		e.emp_name, 
+        count(*) as count
+	from employee e, vacation v
+    where e.emp_id = v.emp_id
+    group by e.emp_id
+    order by count desc
+    limit 5;
 
+select 	e.emp_id,
+		e.emp_name, 
+        count(*) as count
+	from employee e inner join vacation v
+					on e.emp_id = v.emp_id
+    group by e.emp_id
+    order by count desc
+    limit 5;
+
+-- 영업부서 사원의 사원명, 폰번호, 부서명, 휴가사용 이유, 소속본부 조회
+-- 휴가사용 이유가 '두통'인 사원 조회
+select  e.emp_name,
+		e.phone,
+        d.dept_name,
+        v.reason,
+        u.unit_name
+	from unit u, department d, employee e, vacation v
+    where u.unit_id = d.unit_id
+		and d.dept_id = e.dept_id
+        and e.emp_id = v.emp_id
+        and d.dept_name = '영업'
+        and v.reason = '두통';
+
+-- ANSI SQL
+select  e.emp_name,
+		e.phone,
+        d.dept_name,
+        v.reason,
+        u.unit_name
+	from unit u inner join department d on u.unit_id = d.unit_id
+				inner join employee e on d.dept_id = e.dept_id
+                inner join vacation v on e.emp_id = v.emp_id
+    where d.dept_name = '영업'
+        and v.reason = '두통';
+        
+        
+
+        
 
 
 
