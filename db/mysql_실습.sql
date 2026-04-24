@@ -1264,6 +1264,41 @@ select *
 	from employee
     where retire_date = (select min(retire_date) from employee);
 
+-- [서브쿼리 : 단일행]
+-- 가장 많은 휴가기간(duration)을 사용한 사원이 속한 부서의 모든 사원들을 조회
+select *
+	from employee
+    where dept_id = ( select dept_id from employee
+						where emp_id = (select emp_id from vacation 
+											order by duration desc limit 1));
+select * from employee
+where dept_id = (
+select distinct e.dept_id
+	from employee e, vacation v
+    where e.emp_id = v.emp_id
+		and e.emp_id = (select emp_id from vacation 
+											order by duration desc limit 1));
+
+-- [서브쿼리 : 다중행 - IN, EXIST ..] 
+-- '제3본부'에 속한 모든 사원 정보 조회
+select * from employee 
+	where dept_id in (select dept_id 
+						from department 
+                        where unit_id = (select unit_id 
+											from unit 
+                                            where unit_name = '제3본부')); 
+
+
+-- '제3본부'에 속한 모든 사원 휴가 사용 정보 조회
+select * from vacation
+	where emp_id 
+		in (select emp_id from employee 
+				where dept_id 
+                in (select dept_id 
+						from department 
+						where unit_id = (select unit_id 
+											from unit 
+											where unit_name = '제3본부'))); 
 
                       
    
