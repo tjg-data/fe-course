@@ -1300,7 +1300,94 @@ select * from vacation
 											from unit 
 											where unit_name = '제3본부'))); 
 
-                      
+-- 휴가를 한 번이라도 사용한 모든 사원 조회
+select * from employee e
+	where exists (select 1
+				from vacation v
+				where e.emp_id = v.emp_id);
+
+-- [인라인뷰 : 메인쿼리의 테이블 자리에 들어가는 쿼리 형식]
+-- [휴가를 사용한 사원기준]사원별 휴가사용 일수를 그룹핑하여, 사원번호, 사원명, 입사일, 급여, 휴가사용일수를 조회
+-- 1) 사원별 휴가사용 일수 그룹핑
+select emp_id, sum(duration) as count
+	from vacation
+    group by emp_id;
+-- 2) employee 테이블과 inner join
+select  e.emp_id,
+		e.emp_name,
+        e.hire_date,
+        e.salary,
+        v.count as '휴가사용일수'
+	from employee e, 
+         (select emp_id, sum(duration) as count
+			from vacation
+			group by emp_id) v
+	where e.emp_id = v.emp_id;
+
+-- ANSI SQL
+select  e.emp_id,
+		e.emp_name,
+        e.hire_date,
+        e.salary,
+        v.count as '휴가사용일수'
+	from employee e inner join 
+					 (select emp_id, sum(duration) as count
+						from vacation
+						group by emp_id) v
+					on e.emp_id = v.emp_id;	
+
+-- [휴가를 사용한 사원 + 사용하지 않은 사원 포함]
+-- 사원별 휴가사용 일수를 그룹핑하여, 사원번호, 사원명, 입사일, 급여, 휴가사용일수를 조회 
+-- 휴가를 사용하지 않은 사원의 휴가사용일수는 0
+-- 휴가사용일수는 내림차순 정렬
+select 	e.emp_id,
+		e.emp_name,
+        e.hire_date,
+        e.salary,
+        ifnull(v.count, 0) as count
+from employee e left outer join			
+				(select emp_id, sum(duration) as count
+					from vacation
+					group by emp_id) v
+				on e.emp_id = v.emp_id
+order by count desc;
+
+-- '2015' ~ '2017'년도 입사한 사원들의 총휴가사용 일수 조회
+-- 1) '2015' ~ '2017'년도 입사자 조회
+select *
+	from employee
+    where left(hire_date, 4) between '2015' and '2017';
+
+-- 2) 사원별 총휴가일수 조회
+select emp_id, sum(duration) as count
+	from vacation 
+    group by emp_id;
+
+-- 3) 1, 2을 조인 => 2015~2017년도 입사자들의 휴가사용 일수 모두 포함
+select  t1.emp_id,
+		t1.emp_name,
+        t1.hire_date,
+        ifnull(t2.count, 0) as count
+	from (select *
+			from employee
+			where left(hire_date, 4) between '2015' and '2017') t1
+		left outer join
+		 (select emp_id, sum(duration) as count
+			from vacation 
+			group by emp_id) t2
+		on t1.emp_id = t2.emp_id
+	order by count desc ;
+
+
+
+
+
+
+
+
+
+
+                   
    
 
 
