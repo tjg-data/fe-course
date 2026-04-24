@@ -1571,7 +1571,22 @@ select * from information_schema.views
 -- 
 select * from v_emp_dept;
 
+-- '제3본부' 소속 부서의 사원들 휴가사용 일수를 조회
+select *
+	from unit u, v_emp_dept ve
+    where ve.unit_id = u.unit_id
+		and u.unit_name = '제3본부';
 
+-- 휴가사용일수가 15일 이상되는 사원들의 사원명, 부서아이디, 부서명, 본부아이디, 본부명 조회
+select  ve.emp_name,
+		ve.dept_id,
+        ve.dept_name,
+        u.unit_id,
+        u.unit_name
+	from unit u, v_emp_dept ve
+    where u.unit_id = ve.unit_id
+		and ve.duration >= 15
+	order by ve.duration desc;
 
 
 
