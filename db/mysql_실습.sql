@@ -1378,6 +1378,52 @@ select  t1.emp_id,
 		on t1.emp_id = t2.emp_id
 	order by count desc ;
 
+-- 1) 부서별 총급여, 평균급여를 조회
+select  dept_id,
+		sum(ifnull(salary, 0)) sum, 
+		floor(avg(ifnull(salary, 0))) avg
+	from employee
+    group by dept_id;
+
+-- 2) 부서테이블과 조인하여 모든 부서의 총급여, 평균급여 출력  
+select count(*) from department; 
+select  d.dept_id,
+		d.dept_name, 
+        d.unit_id,
+        d.start_date,
+        ifnull(t1.sum, 0) sum,
+        ifnull(t1.avg, 0) avg
+	from department d left outer join
+					(select  dept_id,
+							sum(ifnull(salary, 0)) sum, 
+							floor(avg(ifnull(salary, 0))) avg
+						from employee
+						group by dept_id) t1
+					on d.dept_id = t1.dept_id;
+
+-- 3) 사원테이블을 조인하여, 사원명, 급여, 부서아이디, 부서명, 총급여, 평균급여 조회
+select  e.emp_name,
+		e.salary,
+        s.dept_id,
+        s.dept_name,
+        s.sum,
+        s.avg
+	from employee e,
+		(select  d.dept_id,
+				d.dept_name, 
+				d.unit_id,
+				d.start_date,
+				ifnull(t1.sum, 0) sum,
+				ifnull(t1.avg, 0) avg
+			from department d left outer join
+							(select  dept_id,
+									sum(ifnull(salary, 0)) sum, 
+									floor(avg(ifnull(salary, 0))) avg
+								from employee
+								group by dept_id) t1
+							on d.dept_id = t1.dept_id) s
+	where e.dept_id = s.dept_id;
+
 
 
 
