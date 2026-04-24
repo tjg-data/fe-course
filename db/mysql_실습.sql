@@ -1424,11 +1424,63 @@ select  e.emp_name,
 							on d.dept_id = t1.dept_id) s
 	where e.dept_id = s.dept_id;
 
+-- [스칼라서브쿼리 : 컬럼리스트에 사용하는 서브쿼리 형식]
+-- 정보시스템 부서의 사원정보 출력
+-- 정보시스템 부서의 총급여, 평균급여 함께 출력
+select  emp_id,
+		emp_name,
+        dept_id,
+        salary,
+        (select sum(salary) from employee where dept_id='SYS') as '총급여',
+        (select floor(avg(salary)) from employee where dept_id='SYS')
+			as '평균급여'
+	from employee
+    where dept_id = 'SYS';
 
 
+ /*******************************************************
+	테이블 결과 합치기 : union, union all
+	형식> 쿼리1 실행 결과 
+         union  => 중복 제거
+         쿼리2 실행 결과
+	형식> 쿼리1 실행 결과 
+         union all  => 중복 허용
+         쿼리2 실행 결과   
+	🔆 쿼리1, 쿼리2의 실행 컬럼의 타입과 이름이 동일해야함
+********************************************************/ 
+-- 영업(MKT), 정보시스템(SYS) 부서의 사원아이디, 사원명, 급여, 부서아이디 조회
+-- union을 사용하여 실행결과 합치기
+select emp_id, emp_name, salary, dept_id 
+	from employee 
+    where dept_id = 'MKT'
+union    
+select emp_id, emp_name, salary, dept_id 
+	from employee 
+    where dept_id = 'SYS'
+union
+select emp_id, emp_name, salary, dept_id 
+	from employee 
+    where dept_id = 'MKT';
 
+-- 영업(MKT), 정보시스템(SYS) 부서의 사원아이디, 사원명, 급여, 부서아이디 조회
+-- union all을 사용하여 실행결과 합치기
+select emp_id, emp_name, salary, dept_id 
+	from employee 
+    where dept_id = 'MKT'
+union    
+select emp_id, emp_name, salary, dept_id 
+	from employee 
+    where dept_id = 'SYS'
+union    
+select emp_id, emp_name, salary, dept_id 
+	from employee 
+    where dept_id = 'SYS'    
+union all
+select emp_id, emp_name, salary, dept_id 
+	from employee 
+    where dept_id = 'MKT';
 
-
+    
 
 
 
