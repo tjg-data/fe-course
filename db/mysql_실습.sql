@@ -1480,13 +1480,107 @@ select emp_id, emp_name, salary, dept_id
 	from employee 
     where dept_id = 'MKT';
 
+/*******************************************************
+	논리적인 테이블 : 뷰(View)
+    - SQL을 실행하여 생성된 결과를 가상테이블로 정의
+    - 생성> CREATE VIEW [VIEW NAME]
+			AS [ SQL 정의 ]
+	- 삭제> DROP VIEW [VIEW NAME]
+    🔆 VIEW 생성시 권한을 할당 받아야 함!! => MySQL,Maria 기본할당
+********************************************************/    
+-- 시스템에 생성된 뷰 정보 확인
+-- information_schema.views
+select *
+	from information_schema.views
+    where table_schema = 'hrdb2019';
     
+-- 부서 총급여가 30000 이상인 뷰 정의
+create view sum_salary
+as 
+	select  dept_id, 
+			ifnull(sum(salary), 0) as sum
+		from employee
+		group by dept_id
+		having ifnull(sum(salary), 0) >= 30000;
 
+-- sum_salray 조회
+select dept_id from sum_salary;   
 
+-- sum_salary 뷰삭제     
+drop view sum_salary;
+select * from information_schema.views
+	where table_schema = 'hrdb2019';
 
+-- 사원테이블을 조인하여, 사원명, 급여, 부서아이디, 부서명, 총급여, 평균급여 조회
+create view emp_dept_sum
+as
+	select  e.emp_name,
+			e.salary,
+			s.dept_id,
+			s.dept_name,
+			s.sum,
+			s.avg
+		from employee e,
+			(select  d.dept_id,
+					d.dept_name, 
+					d.unit_id,
+					d.start_date,
+					ifnull(t1.sum, 0) sum,
+					ifnull(t1.avg, 0) avg
+				from department d left outer join
+								(select  dept_id,
+										sum(ifnull(salary, 0)) sum, 
+										floor(avg(ifnull(salary, 0))) avg
+									from employee
+									group by dept_id) t1
+								on d.dept_id = t1.dept_id) s
+		where e.dept_id = s.dept_id;
 
-                   
+-- view 확인
+select * from information_schema.views
+	where table_schema = 'hrdb2019';
    
+-- emp_dept_sum 테이블에서 '홍길동'사원의 정보 조회
+select * from emp_dept_sum;
+select *
+	from emp_dept_sum
+    where emp_name = '홍길동';
+
+-- 사원별 전체휴가사용일수, 부서아이디, 부서명을 조회한 후 뷰로 생성
+-- 전체 사원 대상, null은 0으로 대체
+create view v_emp_dept
+as
+select 	e.emp_id,
+		e.emp_name,
+        e.hire_date,
+        e.salary,
+        ifnull(v.duration, 0) as duration,
+        d.dept_id,
+        d.dept_name,
+        d.unit_id
+	from ( select emp_id, sum(duration) as duration
+			from vacation
+			group by emp_id ) v right outer join employee e
+		 on v.emp_id = e.emp_id
+         right outer join department d
+         on e.dept_id = d.dept_id;
+            
+select * from information_schema.views
+	where table_schema = 'hrdb2019';
+
+-- 
+select * from v_emp_dept;
+
+
+
+
+
+
+
+
+
+
+  
 
 
 
