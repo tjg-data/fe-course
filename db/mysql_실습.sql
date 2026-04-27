@@ -1904,6 +1904,24 @@ update emp set email = 'test@naver.com';
 alter table emp modify email varchar(20) not null;
 desc emp;
 
+-- employee 테이블을 복제하여 copy_emp 테이블 생성
+show tables;
+
+create table copy_emp 
+as
+select * from employee;
+
+desc copy_emp;
+select count(*) from copy_emp;
+
+
+
+
+
+
+
+
+
 
     
             
