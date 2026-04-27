@@ -1913,6 +1913,104 @@ select * from employee;
 
 desc copy_emp;
 select count(*) from copy_emp;
+select * from copy_emp;
+
+-- 홍길동 사원의 급여를 6000으로 수정
+update copy_emp
+	set salary = 6000
+    where emp_id = 'S0001';
+select * from copy_emp where emp_id = 'S0001';    
+
+-- 안경태 사원의 입사일을 '20210705'로 수정
+select emp_id from copy_emp where emp_name = '안경태';  -- S0007
+update copy_emp
+	set hire_date = cast('20210705' as date)  -- cast 함수
+    where emp_id = 'S0007';
+    
+select * from copy_emp where emp_id = 'S0007';
+
+show tables;
+desc emp2;
+-- (1) emp2 테이블에 retire_date 컬럼 추가 : date, null 허용
+-- (2) null 데이터를 현재 날짜로 수정
+-- (3) retire_date를 'not null' 제약 정의
+select count(*) from emp2;  -- 6
+alter table emp2
+	add column retire_date date;
+desc emp2;
+select * from emp2;
+update emp2 
+	set retire_date = curdate();    
+    
+alter table emp2
+	modify column retire_date date not null;
+desc emp2;
+
+-- copy_emp 테이블에서 '정보시스템' 부서의 모든 사원 급여를 20% 증가
+select * from copy_emp;
+update copy_emp
+	set salary = salary + salary * 0.2
+    where dept_id = (select dept_id from department 
+						where dept_name = '정보시스템');  
+
+-- 'S0003'인 강우동 사원의 영어이름을 'kang', 입사일은 현재날짜, 부서를 MKT로 변경
+select * from copy_emp where emp_id = 'S0003';
+update copy_emp
+	set eng_name = 'kang',
+		hire_date = curdate(),
+        dept_id = 'MKT'
+	where emp_id = 'S0003';
+					                        
+-- 트랜잭션별 업데이트 정의
+-- 트랜잭션 관리 명령어 DTL : commit(작업완료), rollback(작업복원)   
+-- 현재 트랜잭션 방식 확인 1, 시스템에서 자동 트랜잭션 관리
+-- DML 명령어에 영향을 줌, DDL은 관리방식에 상관없이 무조건 autocommit
+select @@autocommit;            
+set autocommit = 0;  -- 트랜잭션 관리 방식을 수동 전환
+
+
+commit;  -- 새로운 트랜잭션 시작
+select * from emp;
+
+-- 이순신의 급여를 3000으로 수정
+update emp set salary = 3000 where eid = 'S002';  -- 물리적 DB에 반영되기 전
+select * from emp;
+-- rollback;
+commit;
+select * from emp;
+rollback;
+
+/***************************************************************
+	데이터 삭제 : DELETE
+    형식> DELETE FROM [테이블명]
+		 WHERE [조건절]
+	‼ MySQL은 Update 권한 변경 후 진행
+    => SET SQL_SAFE_UPDATES = 0(허용) / 1(불가);
+***************************************************************/ 
+select @@sql_safe_updates;  -- 업데이트 모드 해제
+select @@autocommit;  		-- 수동으로 트랜잭션 관리
+commit;
+-- emp 테이블의 이순신, 홍길동 사원 삭제
+select * from emp;
+delete from emp 
+	where eid in ('S001', 'S002');
+-- rollback;
+commit;
+select * from emp;
+
+--
+commit;
+-- emp 테이블의 모든 사원 삭제, truncate 명령어 사용
+truncate table emp; 
+select * from emp;
+rollback;  -- truncate table 명령은 ddl이므로 autocommit 됨
+commit;
+
+set autocommit = 1;
+select @@autocommit;
+
+            
+
 
 
 
