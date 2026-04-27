@@ -1589,15 +1589,260 @@ select  ve.emp_name,
 	order by ve.duration desc;
 
 
+/***************************************************************
+	DDL(Data Definition Language) : 생성, 수정, 삭제 -> 테이블 기준
+	DML(Data Manuplation Language) : 생성, 읽기, 수정, 삭제 -> 데이터 기준
+    C(Create) - Insert
+    R(Read)   - Select
+    U(Update) - Update
+    D(Delete) - Delete
+***************************************************************/
+use hrdb2019;
+select database();
+show tables;
 
+/***************************************************************
+	DDL(Data Definition Language) : 생성, 수정, 삭제 -> 테이블 기준
+	테이블 생성 형식>
+		CREATE TABLE [테이블명] (
+			컬럼명	데이터타입(크기)		옵션(제약사항, 널포함..)
+            ....
+        )  
+	데이터 타입 정리
+    분류			타입			크기/형식			설명			사용예
+    -----------------------------------------------------------
+    정수형		tinyint		1byte		 작은 정수값 	  상태값(0/1)
+				smallint	2byte		 			  카운트
+				int			4byte		 디폴트값		  일반정수값
+                bigint		8byte		 큰 정수값      pk,주문번호
+    실수형		float		4byte		 부동소수점     거의 사용안함
+				double		8byte		 디폴트값		  통계수치
+    문자형(고정)	char		고정길이	 	빠른공간확보(장)  코드값
+										공간낭비(단) 
+    문자형(가변)	varchar     가변길이		가장 많이 사용됨  이름, 주소,...
+    텍스트		text		~ 64kb		긴 문장 저장		게시글 
+				longtext	~ 4GB		초대형 텍스트		로그
+	바이너리		blob		~64, ~4GB	이미지 파일, 파일저장
+    날짜			date		yyyy-mm-dd  날짜				생일
+				datetime	date + 시간  날짜, 시간..		작업완료
+	JSON		JSON		JSON 구조	API 데이터처리		API 응답..
+***************************************************************/
+desc employee;
 
+-- emp 테이블 생성
+-- emp_id(사번): 4, ename(사원명): 5, hire_date(입사일): date, 
+-- salary(급여): 4
+create table emp(
+	emp_id		char(4),   -- 0001, 0002..
+    ename		varchar(5),
+    hire_date	date,
+    salary		int
+);
+show tables;
+desc emp;
+select * 
+	from information_schema.tables
+	where table_schema = 'hrdb2019';
 
+/***************************************************************
+	테이블 삭제
+    형식> DROP TABLE [테이블명];
+***************************************************************/
+show tables;
+select * from information_schema.tables
+	where table_name = 'emp';
 
+drop table emp;    
 
+/***************************************************************
+	테이블 복제(CAS)
+    형식> CREATE TABLE [테이블명]
+			AS [서브쿼리];
+***************************************************************/
+-- 2016년도 입사한 사원의 정보를 조회하여 EMPLOYEE_2016 테이블 생성
+create table employee_2016
+as
+select * 
+	from employee
+	where left(hire_date, 4) = '2016';
 
+show tables;
+select * from information_schema.tables
+	where table_name = 'employee_2016';
+
+desc employee_2016;  -- 🔆 원본의 제약사항은 복제되지 않음!!    
+desc employee;
   
+-- employee_department 테이블 생성
+-- employee + department 테이블 조인, dept_id는 하나만 저장
+create table employee_department
+as
+select  e.emp_id,
+		e.emp_name,
+        e.gender,
+        e.hire_date,
+        e.phone,
+        e.email,
+        e.salary,
+        d.dept_id,
+        d.dept_name,
+        d.unit_id,
+        d.start_date
+	from employee e, department d
+    where e.dept_id = d.dept_id;
+
+show tables;
+select * from information_schema.tables
+	where table_name = 'employee_department';
+
+desc employee_department;    
+select * from employee_department;
+
+-- 테이블 구조만 복제
+create table emp
+as
+select * from employee
+	where 1 = 0;
+
+show tables;
+desc emp;
+
+/***************************************************************
+	데이터 생성(Create :: Insert)
+    형식> INSERT INTO [테이블명] (컬럼리스트..)  -- 컬럼리스트 생략가능
+			VALUES(데이터1, 데이터2...)
+***************************************************************/
+desc emp;
+insert into emp(emp_id, 	-- char(5)
+				emp_name, 	-- varchar(4)
+				eng_name,	-- varchar(20)
+                gender,		-- char(1)
+                hire_date,	-- date
+                retire_date, -- date, null 허용
+                dept_id, 
+                phone,
+                email,
+                salary)
+	value('S0001', '홍길동', null, 'M', curdate(), null
+			, 'SYS', '010-1234-1234', 'hong@naver.com', null);
+
+select * from emp;            
+
+-- 컬럼리스트 상의 순서와 입력 데이터가 정확히 매핑 되어야함
+insert into emp(emp_name, 	-- char(5)
+				emp_id, 	-- varchar(4)
+				eng_name,	-- varchar(20)
+                gender,		-- char(1)
+                hire_date,	-- date
+                retire_date, -- date, null 허용
+                dept_id, 
+                phone,
+                email,
+                salary)
+	value('이순신', 'S0002', null, 'M', curdate(), null
+			, 'SYS', '010-1234-1234', 'hong@naver.com', null);
+
+-- 컬럼리스트 생략 시 테이블 구조를 기준으로 입력
+desc emp;
+insert into emp
+	value('S0003', '김삼순', null, 'F', curdate(), null
+			, 'SYS', '010-1234-1234', 'kim@naver.com', null);
+select * from emp;            
+            
+-- null이 허용되는 컬럼은 컬럼리스트에서 생략 가능
+insert into emp(emp_id, 	-- char(5)
+				emp_name, 	-- varchar(4)
+                gender,		-- char(1)
+                hire_date,	-- date
+                dept_id, 
+                phone,
+                email)
+	value('S0004', '홍길순', 'M', curdate(), 
+			'SYS', '010-1234-1234', 'hong@naver.com');  
+            
+select * from emp;            
+            
+/***************************************************************
+	DDL - 테이블의 데이터 절삭(Truncate), 데이터가 영구적으로 삭제
+    형식> TRUNCATE TABLE [테이블명];
+***************************************************************/
+select count(*) from emp;  -- 5
+select * from emp;
+
+truncate table emp;
+drop table emp;
+show tables;
+select * from information_schema.tables
+	where table_name = 'emp';
+    
+-- emp 생성 : eid(char, 4), ename(varchar, 5), gender(char, 1)
+-- 			 hire_date(datetime), salary(int)
+-- eid, ename, gender 컬럼은 null을 허용하지 않음 : not null
+create table emp(
+	eid			char(4)		not null,
+    ename		varchar(5)	not null,
+    gender  	char(1)		not null,
+    hire_date	datetime,
+    salary 		int
+);
+show tables;
+select * from information_schema.tables
+		where table_name = 'emp';
+desc emp;      
+
+insert into emp(eid, ename, gender, hire_date, salary)  
+	values('S001', '홍길동', 'M', null, null);
+
+insert into emp(eid, ename, gender)  
+	values('S002', '이순신', 'M');
+ 
+insert into emp(gender, ename, eid, hire_date)  
+	values('F', '홍길순', 'S003', curdate());
+
+insert into emp(gender, ename, eid, hire_date, salary)  
+	values('F', '김유순', 'S004', now(), 1000);
+    
+select * from emp;    
+            
+/***************************************************************
+	자동 번호 생성기 : auto_increment
+    - 테이블 생성시 옵션 자리에 기술, pk 컬럼에 사용, 정수형 데이터 생성
+    - 반드시 primary key 제약과 함께 사용
+    형식> CREATE TABLE [테이블명] (
+		컬럼명 	데이터타입		AUTO_INCREMENT 
+        ...
+    )
+***************************************************************/   
+-- emp2 생성 : eid(int, 자동번호 생성), ename(varchar, 5), gender(char, 1)
+-- 			 hire_date(datetime), salary(int)
+-- eid, ename, gender 컬럼은 null을 허용하지 않음 : not null     
+create table emp2(
+	eid			int				auto_increment 	primary key,  -- uniq + not null
+	ename		varchar(5)		not null,
+    gender		char(1)			not null,
+    hire_date	datetime,
+    salary		int
+);
+show tables;
+select * from information_schema.tables
+	where table_name = 'emp2';
+desc emp2;
+
+insert into emp2 (ename, gender) values('홍길동', 'M');
+insert into emp2 (ename, gender, hire_date) values('이순신', 'M', now());
+insert into emp2 (ename, gender, hire_date, salary) 
+		values('김유신', 'M', now(), 3000);
+
+select * from emp2;
 
 
 
 
+
+
+
+    
+            
+            
+            
 
