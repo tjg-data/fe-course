@@ -2169,12 +2169,94 @@ alter table emp_const3
 select * from emp_const3;
 insert into emp_const3
 	values('S002', '홍길순', curdate(), 3000);
-    
 
+--
+desc emp_const2;
+select * from emp_const2;    
+-- emp_const2 데이터 삭제
+delete from emp_const2;    
 
+-- emp_id 기본키 제약 추가
+alter table emp_const2
+	add constraint pk_emp_const2_emp_id primary key(emp_id);
 
+desc emp_const2; 
+select * from information_schema.table_constraints
+	where table_name = 'emp_const2';
 
+select * from emp_const2;   
+-- dept_id 컬럼 추가 char(3), not null 제약 추가 
+alter table emp_const2
+	add column dept_id	char(3) not null;
+desc emp_const2;    
 
+-- department를 복제하여 department2 테이블 생성
+create table department2
+as
+select * from department;
+
+desc department;
+desc department2;
+select * from department2;
+-- dept_id 컬럼에 기본키 제약 추가
+alter table department2
+	add constraint pk_department2_dept_id primary key(dept_id);
+
+select * from information_schema.key_column_usage
+		where table_name = 'department2';
+
+-- emp_const2 테이블의 dept_id 컬럼 참조 제약 추가 --> department2의 dept_id
+desc emp_const2;  -- did
+desc department2; -- dept_id
+
+-- 컬럼명 변경
+alter table emp_const2
+	rename column dept_id to did;
+
+-- emp_const2의 did(부서아이디) 컬럼에 참조키 제약 추가
+alter table emp_const2
+	add constraint fk_emp_const2_did foreign key(did)
+			references department2(dept_id);
+
+select * from information_schema.table_constraints
+		where table_name = 'emp_const2';
+
+desc emp_const2;  
+select * from emp_const2;   
+insert into emp_const2(emp_id, emp_name, did)   
+		values('S001', '홍길동', 'SYS');
+        
+        
+insert into emp_const2(emp_id, emp_name, did)   
+		values('S002', '이순신', 'ACC');
+        
+select * from department2;        
+select * from emp_const2;
+
+-- department2 테이블의 SYS 부서 삭제한다면... emp_const2에서 참조하므로, 삭제불가!!
+-- (1) emp_const2 테이블의 sys 참조 행을 삭제 
+-- (2) department2 테이블의 sys 데이터 삭제 가능
+delete from department2
+	where dept_id = 'SYS';
+
+-- (1)     
+delete from emp_const2 where did = 'sys';
+select * from emp_const2;
+
+-- (2)
+delete from department2 where dept_id = 'sys';
+select * from department2;
+
+-- 🔆 참조하는 부모테이블의 컬럼이 변화함에 따라 자식도 함께 적용받도록 옵션 정의
+-- ON [DELETE/UPDATE] CASCADE;  참조키 제약 정의시 마지막에 추가
+select * from information_schema.table_constraints
+		where table_name = 'emp_const2';
+
+-- emp_const2 테이블의 참조키 제약 삭제
+alter table emp_const2
+	drop constraint fk_emp_const2_did;
+
+-- emp_const2 테이블의 참조키 제약 정의, on delete/update cascade 추가
 
   
             
