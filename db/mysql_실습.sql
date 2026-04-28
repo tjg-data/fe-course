@@ -2021,21 +2021,162 @@ select @@autocommit;
     
     ** 제약사항은 테이블 생성시, 테이블 수정시 정의할 수 있음
 ***************************************************************/ 
+use hrdb2019;
+select database();
+select @@sql_safe_updates;  -- 업데이트 모드 확인
+select @@autocommit;  		-- 트랜잭션 방식 확인
+set sql_safe_updates = 0;
 
-select @@sql_safe_updates;  -- 업데이트 모드 해제
-select @@autocommit;  		-- 수동으로 트랜잭션 관리
+-- 제약사항 확인
+show tables;
+desc employee;
+select * from information_schema.table_constraints
+	where table_schema = 'hrdb2019';
 
+-- emp_const 테이블 생성, 기본키 제약(primary), 참조키 제약(foreign), not null
+create table emp_const(
+	emp_id		char(4)		primary key,
+    emp_name	varchar(5)	not null,
+    hire_date	date,
+    salary		int
+);
+show tables;
+select * from information_schema.tables
+	where table_name like 'emp%';
+desc emp_const;    
+desc emp_const2;    
 
+create table emp_const2(
+	emp_id		char(4)	,
+    emp_name	varchar(5)	not null,
+    hire_date	date,
+    salary		int
+);
 
+-- 데이터 insert 작업 시 제약사항 체크함
+insert into emp_const(emp_id, emp_name, hire_date, salary)
+		values('S001', '홍길동', curdate(), 1000);
+        
+insert into emp_const2(emp_id, emp_name, hire_date, salary)
+		values('S001', '홍길동', curdate(), 1000);
+        
+insert into emp_const(emp_id, emp_name)
+		values('S002', '스미스');
 
+insert into emp_const2(emp_id, emp_name)
+		values('S002', '스미스');
 
+select * from emp_const;        
+select * from emp_const2;  
 
-
-
-
-
-
+create table emp_const3(
+	emp_id		char(4),
+    emp_name	varchar(5)	not null,
+    hire_date	date,
+    salary		int,
+    constraint pk_emp_const3_emp_id  primary key(emp_id)
+);
+desc emp_const3;
+select * from information_schema.table_constraints
+	where table_name = 'emp_const3';
     
+select * from information_schema.table_constraints
+	where table_schema = 'hrdb2019';
+
+/***************************************************************
+	제약사항 추가/수정/삭제 
+	형식> ALTER TABLE [테이블명]
+		ADD CONSTRAINT [제약사항명] 제약사항(컬럼)
+        MODIFY CONSTRAINT [제약사항명] 제약사항(컬럼)
+        DROP [제약사항명]
+	🔆 제약사항은 삭제 후 재정의하는 것을 원칙으로함!!
+***************************************************************/
+-- emp_const 테이블의 제약사항 확인
+select * from information_schema.table_constraints
+	where table_name = 'emp_const';
+desc emp_const;   
+
+-- emp_const 테이블에 phone 컬럼 추가, char(13) 
+select * from emp_const;
+alter table emp_const
+	add phone char(13);
+desc emp_const;   
+-- phone 컬럼에 null 값을 '010-1111-1234' 수정
+select @@sql_safe_updates;
+update emp_const set phone = '010-1111-1234';
+select * from emp_const;
+
+-- phone 컬럼에 default 제약사항 추가 '010-1111-1234' 수정  
+alter table emp_const
+	modify phone char(13) default '010-1111-1234';
+desc emp_const;  -- not null, default 제약 확인
+select * from information_schema.table_constraints
+	where table_name = 'emp_const';  -- pk, fk 확인
+
+select * from emp_const;
+insert into emp_const(emp_id, emp_name, hire_date)
+		values ('S003', '홍길동', now());
+
+-- salary 컬럼에 default 제약 추가 기본값 : 1000
+alter table emp_const
+	modify salary int default 1000;
+desc emp_const;    
+    
+-- hire_date 컬럼에 default 제약 추가 curdate() 함수사용 불가, '년-월-일'
+alter table emp_const
+	modify hire_date date default '2026-01-01';
+desc emp_const;
+
+insert into emp_const(emp_id, emp_name) values('S004', '김유신');  
+select * from emp_const;
+
+-- check 제약 : mysql 8.0(+)  
+desc emp_const;
+desc emp_const3;
+-- emp_const3 테이블의 
+-- hire_date 컬럼은 default 제약 추가, '2026-04-01',
+-- salary 컬럼은 not null 제약 변경
+select * from emp_const3;
+alter table emp_const3
+	modify hire_date date default '2026-04-01';
+
+alter table emp_const3
+	modify salary int not null;
+
+desc emp_const3;
+
+-- salary 값 입력시 '3000' 이상인 값만 저장되도록 check 제약사항 추가
+alter table emp_const3
+	add constraint chk_emp_const3_salary check (salary >= 3000);
+
+select * from information_schema.table_constraints
+		where table_name = 'emp_const3';
+
+select * from emp_const3;
+insert into emp_const3(emp_id, emp_name, salary)
+			values('S001', '홍길동', 4000);
+
+-- emp_const3 테이블에 emp_name 컬럼에 unique 제약 추가
+select * from information_schema.table_constraints
+	where table_name = 'emp_const3';
+            
+select * from information_schema.key_column_usage
+	where table_name = 'emp_const3';
+
+alter table emp_const3
+	add constraint un_emp_const3_emp_name unique(emp_name);
+
+select * from emp_const3;
+insert into emp_const3
+	values('S002', '홍길순', curdate(), 3000);
+    
+
+
+
+
+
+
+  
             
             
             
