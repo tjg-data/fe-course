@@ -2257,8 +2257,33 @@ alter table emp_const2
 	drop constraint fk_emp_const2_did;
 
 -- emp_const2 테이블의 참조키 제약 정의, on delete/update cascade 추가
+alter table emp_const2
+	add constraint fk_emp_const2_did foreign key(did)
+		references department2(dept_id)
+			on delete cascade
+            on update cascade;
 
-  
+desc emp_const2;            
+select * from information_schema.key_column_usage
+		where table_name = 'emp_const2';
+
+select * from emp_const2;
+
+-- department2의 'ACC' 부서를 'ABC' 부서로 수정
+update department2
+	set dept_id = 'ABC'
+    where dept_id = 'ACC';
+
+select * from department2;    
+select * from emp_const2;    
+
+-- department2의 'ABC' 부서를 삭제
+delete from department2 where dept_id = 'ABC';
+
+
+
+
+
             
             
             
