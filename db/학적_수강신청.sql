@@ -96,9 +96,21 @@ insert into student(student_name) values('안경태');
 insert into student(student_name) values('정주고');
 insert into student(student_name) values('고소해');
 
--- [student : 학생] 테이블 데이터 입력
-
-
+-- [subject : 과목] 테이블 데이터 입력
+desc subject;
+select * from instructor;
+select * from subject;
+insert into subject(subject_name, class_room, instructor_no)
+			value('MySQL', '101호', 1);
+insert into subject(subject_name, class_room, instructor_no)
+			value('HTML', '103호', 2);
+insert into subject(subject_name, class_room, instructor_no)
+			value('Oracle', '201호', 1);
+insert into subject(subject_name, class_room, instructor_no)
+			value('React', '301호', 3);
+insert into subject(subject_name, class_room, instructor_no)
+			value('NodeJS', '303호', 3);
+            
  
 
 
