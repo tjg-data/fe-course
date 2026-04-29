@@ -2377,6 +2377,11 @@ end $$
 delimiter ;
 /************************************************/
 
+desc member;
+insert into member(name, mdate) values('홍길동', now());
+
+select * from member;
+
             
             
             
