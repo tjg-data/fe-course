@@ -73,7 +73,33 @@ desc enrollment;
 select * from information_schema.table_constraints
 	where table_name = 'enrollment';
 
+-- [instructor : 강사] 테이블 데이터 입력
+desc instructor;
+select * from instructor;    
+insert into instructor(instructor_name, age, gender)
+			values('스미스', 35, 'M');
+insert into instructor(instructor_name, age, gender)
+			values('김영희', 30, 'F');
+insert into instructor(instructor_name, age, gender)
+			values('Anne', 25, 'F');            
 
+-- [student : 학생] 테이블 데이터 입력
+-- 학생 테이블의 address 컬럼에 default 제약 추가 : '서울시 강남구'
+desc student;
+alter table student
+	modify address	varchar(30)	 default '서울시 강남구';
+
+select * from student;    
+insert into student(student_name) values('정효리');
+insert into student(student_name) values('오감자');
+insert into student(student_name) values('안경태');
+insert into student(student_name) values('정주고');
+insert into student(student_name) values('고소해');
+
+-- [student : 학생] 테이블 데이터 입력
+
+
+ 
 
 
 
