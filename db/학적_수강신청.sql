@@ -137,9 +137,41 @@ insert into enrollment(student_id, subject_no, grade)  values(1, 5, 'C');
 insert into enrollment(student_id, subject_no, grade)  values(2, 3, 'A');
 
 -- A학점을 받은 학생의 정보를 조회
+select  s.student_name as '학생명',
+		s.address as '주소',
+        e.grade as '학점'
+	from student s, enrollment e
+    where s.student_id = e.student_id
+		and e.grade = 'A';
+
+select  s.student_name as '학생명',
+		s.address as '주소',
+        e.grade as '학점'
+	from student s inner join enrollment e
+					on s.student_id = e.student_id
+	where e.grade = 'A';
 
 -- C학점을 받은 학생의 정보와 과목명을 조회
+select  st.student_name,
+		st.address,
+        su.subject_name,
+        su.class_room,
+        e.grade
+	from student st, subject su, enrollment e
+    where st.student_id = e.student_id
+		and su.subject_no = e.subject_no
+        and e.grade = 'C';
 
+select  st.student_name,
+		st.address,
+        su.subject_name,
+        su.class_room,
+        e.grade
+	from student st inner join enrollment e on st.student_id = e.student_id
+					inner join subject su   on su.subject_no = e.subject_no
+	where e.grade = 'C';
+
+-- 100분 강의하는 과목정보와 강사정보를 조회
 
 
 
