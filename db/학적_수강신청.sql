@@ -172,14 +172,74 @@ select  st.student_name,
 	where e.grade = 'C';
 
 -- 100분 강의하는 과목정보와 강사정보를 조회
+select  i.instructor_name,
+		i.age,
+        i.gender,
+        su.subject_name,
+        su.class_room,
+        ct.class_time
+	from instructor i, subject su, class_time ct
+    where i.instructor_no = su.instructor_no
+		and su.subject_no = ct.subject_no
+        and ct.class_time = '100분';
+        
+-- ANSI SQL        
 
 -- 100분 강의하는 강사정보, 과목명을 조회 => 서브쿼리사용, 과목명(스칼라 서브쿼리)
+select  instructor_no,
+		instructor_name,
+		age,
+        gender,
+        (select subject_name
+							from subject 
+							where subject_no = (select subject_no 
+													from class_time
+														where class_time = '100분'))
+		as subject_name
+	from instructor
+	where instructor_no = (select instructor_no
+							from subject 
+							where subject_no = (select subject_no 
+													from class_time
+													where class_time = '100분'));
+
 
 -- 김영희 강사가 강의하는 모든 과목 조회
+select  su.subject_name,
+		su.class_room
+	from instructor i, subject su
+    where i.instructor_no = su.instructor_no
+		and i.instructor_name = '김영희';
+
+select  su.subject_name,
+		su.class_room
+	from subject su
+    where su.instructor_no = (select instructor_no 
+								from instructor 
+                                where instructor_name = '김영희');
 
 -- 홍길동 강사가 강의하는 과목과 과목을 수강한 학생정보와 성적을 조회
+select  i.instructor_name,
+		su.subject_name, 
+        su.class_room,
+        st.student_name,
+        e.grade
+	from instructor i, subject su, student st, enrollment e
+    where i.instructor_no = su.instructor_no
+		and su.subject_no = e.subject_no
+        and e.student_id = st.student_id
+        and i.instructor_name = '홍길동';
+
+-- ANSI SQL        
 
 -- 모든 강사가 강의하는 과목과 성적 조회 (모든 강사 포함)
+select count(*) from instructor;  -- 4
+select count(distinct instructor_no) from subject; -- 3
+select * 
+	from instructor i left outer join	subject su
+					  on i.instructor_no = su.instructor_no;
+
+
 
 
 
