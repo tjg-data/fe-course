@@ -111,7 +111,43 @@ insert into subject(subject_name, class_room, instructor_no)
 insert into subject(subject_name, class_room, instructor_no)
 			value('NodeJS', '303호', 3);
             
- 
+-- [class_time : 강의시간] 테이블 데이터 입력
+desc class_time;
+select * from subject;
+select * from class_time;
+insert into class_time(class_time, subject_no) values('120분', 1);
+insert into class_time(class_time, subject_no) values('160분', 2);
+insert into class_time(class_time, subject_no) values('200분', 3);
+insert into class_time(class_time, subject_no) values('120분', 4);
+insert into class_time(class_time, subject_no) values('100분', 5);
+
+-- [enrollment : 등록] 테이블 데이터 입력
+desc enrollment;
+select * from student; 
+select * from subject;
+select * from enrollment;
+insert into enrollment(student_id, subject_no, grade)  values(1, 1, 'A');
+insert into enrollment(student_id, subject_no, grade)  values(1, 2, 'B');
+insert into enrollment(student_id, subject_no, grade)  values(2, 1, 'C');
+insert into enrollment(student_id, subject_no, grade)  values(3, 1, 'A');
+insert into enrollment(student_id, subject_no, grade)  values(3, 3, 'A');
+insert into enrollment(student_id, subject_no, grade)  values(4, 2, 'D');
+insert into enrollment(student_id, subject_no, grade)  values(4, 1, 'A');
+insert into enrollment(student_id, subject_no, grade)  values(1, 5, 'C');
+insert into enrollment(student_id, subject_no, grade)  values(2, 3, 'A');
+
+-- A학점을 받은 학생의 정보를 조회
+
+-- C학점을 받은 학생의 정보와 과목명을 조회
+
+
+
+
+
+
+
+
+
 
 
 
